@@ -51,6 +51,7 @@ setuptools.setup(
                       'boututils',
                       'future',
                       'bunch',
+                      'PyQt5',
                       'mayavi',
                       'netCDF4'],
     classifiers=[

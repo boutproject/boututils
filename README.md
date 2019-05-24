@@ -7,3 +7,22 @@
 
 pip-package of what was previously found in 
 `BOUT-dev/tools/pylib/boututils`
+
+# Dependencies
+
+`boututils` depends on 
+[`netcfd4`](https://github.com/Unidata/netcdf4-python) which requires 
+[`HDF5`](http://www.h5py.org) and 
+[`netcdf-4`](https://github.com/Unidata/netcdf-c/releases) are 
+installed, and that the `nc-config` utility is in your `PATH`. This 
+can be install with 
+
+```
+sudo apt-get install libhdf5-serial-dev netcdf-bin libnetcdf-dev
+```
+ 
+in ubuntu
+
+# Install
+
+`pip install boututils`
