@@ -24,3 +24,7 @@ addons:
 
 install:
   - pip install boututils
+  - pip install codecov pytest-cov
+
+script:
+  - pytest --cov=./
