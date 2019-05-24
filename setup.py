@@ -52,7 +52,7 @@ setuptools.setup(
                       'future',
                       'bunch',
                       'mayavi',
-                      'netCDF'],
+                      'netCDF4'],
     classifiers=[
         'Programming Language :: Python :: 3',
         ('License :: OSI Approved :: '
