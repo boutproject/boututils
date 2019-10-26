@@ -38,5 +38,5 @@ else:
     do_import.append('View3D')
     __all__ = do_import
 
-__version__ = '0.1.2'
+__version__ = '0.1.3'
 __name__ = 'boututils'

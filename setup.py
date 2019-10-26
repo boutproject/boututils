@@ -51,9 +51,9 @@ setuptools.setup(
                       'boututils',
                       'future',
                       'bunch',
-                      'PyQt5',
-                      'mayavi',
                       'netCDF4'],
+    extras_require={
+                    'mayavi': ['mayavi', 'PyQt5']},
     classifiers=[
         'Programming Language :: Python :: 3',
         ('License :: OSI Approved :: '
