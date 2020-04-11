@@ -27,7 +27,7 @@ setuptools.setup(
     name=name,
     version=version,
     author='Ben Dudson et al.',
-    description='Python package to install BOUT++ and its dependencies',
+    description='Python package containing BOUT++ utils',
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='http://boutproject.github.io',
