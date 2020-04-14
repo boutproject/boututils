@@ -26,7 +26,7 @@ addons:
     - libxkbcommon-x11-0
 
 install:
-  - pip install boututils
+  - pip install --ignore-installed boututils
   - pip install codecov pytest-cov
 
 script:
