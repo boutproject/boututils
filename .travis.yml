@@ -26,6 +26,7 @@ addons:
     - libxkbcommon-x11-0
 
 install:
+  - pip uninstall -y numpy
   - pip install boututils
   - pip install codecov pytest-cov
 
