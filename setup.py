@@ -30,10 +30,10 @@ setuptools.setup(
     description='Python package containing BOUT++ utils',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='http://boutproject.github.io',
+    url='https://github.com/boutproject/boututils',
     project_urls={
         "Bug Tracker": "https://github.com/boutproject/boututils/issues/",
-        "Documentation": "http://bout-dev.readthedocs.io/en/latest/",
+        "Documentation": "https://bout-dev.readthedocs.io/en/latest/",
         "Source Code": "https://github.com/boutproject/boututils/",
     },
     packages=setuptools.find_packages(),

@@ -22,7 +22,7 @@ See [this issue](https://github.com/boutproject/BOUT-dev/issues/1347),
 
 `boututils` depends on
 [`netcfd4`](https://github.com/Unidata/netcdf4-python) which requires
-[`HDF5`](http://www.h5py.org) and
+[`HDF5`](https://www.h5py.org) and
 [`netcdf-4`](https://github.com/Unidata/netcdf-c/releases) are
 installed, and that the `nc-config` utility is in your `PATH`. This
 can be install with
