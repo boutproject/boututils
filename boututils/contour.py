@@ -1,9 +1,7 @@
 """
 Contour calculation routines
 
-https://members.bellatlantic.net/~vze2vrva/thesis.html
-
-"""
+https://web.archive.org/web/20140901225541/https://members.bellatlantic.net/~vze2vrva/thesis.html"""
 from __future__ import print_function
 from __future__ import division
 from past.utils import old_div
