@@ -85,7 +85,7 @@ def determineNumberOfCPUs():
     scaling userspace-only program
 
     Taken from a post on stackoverflow:
-    http://stackoverflow.com/questions/1006289/how-to-find-out-the-number-of-cpus-in-python
+    https://stackoverflow.com/questions/1006289/how-to-find-out-the-number-of-cpus-in-python
 
     Returns
     -------
@@ -229,7 +229,7 @@ def launch(command, runcmd=None, nproc=None, mthread=None,
 
     if mthread is not None:
         cmd = "OMP_NUM_THREADS={j} ".format(j=mthread)+cmd
-        
+
     if verbose == True:
          print(cmd)
 

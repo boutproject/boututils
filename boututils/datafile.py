@@ -81,7 +81,7 @@ class DataFile(object):
     def __init__(self, filename=None, write=False, create=False, format='NETCDF3_64BIT', **kwargs):
         """
 
-        NetCDF formats are described here: http://unidata.github.io/netcdf4-python/
+        NetCDF formats are described here: https://unidata.github.io/netcdf4-python/
         - NETCDF3_CLASSIC   Limited to 2.1Gb files
         - NETCDF3_64BIT_OFFSET or NETCDF3_64BIT is an extension to allow larger file sizes
         - NETCDF3_64BIT_DATA adds 64-bit integer data types and 64-bit dimension sizes
