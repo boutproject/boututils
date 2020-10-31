@@ -50,7 +50,6 @@ setuptools.setup(
                       'h5py',
                       'boututils',
                       'future',
-                      'bunch',
                       'netCDF4'],
     extras_require={
                     'mayavi': ['mayavi', 'PyQt5']},
