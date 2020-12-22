@@ -38,5 +38,23 @@ else:
     do_import.append('View3D')
     __all__ = do_import
 
-__version__ = '0.1.4'
 __name__ = 'boututils'
+
+try:
+    from importlib.metadata import version, PackageNotFoundError
+except ModuleNotFoundError:
+    from importlib_metadata import version, PackageNotFoundError
+try:
+    __version__ = version(__name__)
+except PackageNotFoundError:
+    try:
+        from setuptools_scm import get_version
+    except ModuleNotFoundError as e:
+        error_info = (
+            "'setuptools_scm' is required to get the version number when running "
+            "boututils from the git repo. Please install 'setuptools_scm'."
+        )
+        print(error_info)
+        raise ModuleNotFoundError(str(e) + ". " + error_info)
+    else:
+        __version__ = get_version(root="..", relative_to=__file__)
