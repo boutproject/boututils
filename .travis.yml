@@ -27,7 +27,7 @@ addons:
 
 install:
   - pip uninstall -y numpy
-  - pip install codecov pytest-cov
+  - pip install codecov pytest-cov setuptools_scm
 
 script:
   - pytest --cov=./
