@@ -26,7 +26,8 @@ addons:
     - libxkbcommon-x11-0
 
 install:
-  - pip install codecov pytest-cov numpy matplotlib scipy h5py future netCDF4 setuptools_scm
+  - pip install setuptools_scm
+  - pip install .
 
 script:
   - pytest --cov=./
