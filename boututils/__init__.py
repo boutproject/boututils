@@ -57,4 +57,6 @@ except PackageNotFoundError:
         print(error_info)
         raise ModuleNotFoundError(str(e) + ". " + error_info)
     else:
-        __version__ = get_version(root="..", relative_to=__file__)
+        from pathlib import Path
+        path = Path(__file__).resolve()
+        __version__ = get_version(root="..", relative_to=path)
