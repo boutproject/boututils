@@ -42,7 +42,7 @@ setuptools.setup(
                       'scipy',
                       'h5py',
                       'future',
-                      'netCDF4'
+                      'netCDF4',
                       "importlib-metadata ; python_version<'3.8'"],
     extras_require={
                     'mayavi': ['mayavi', 'PyQt5']},
