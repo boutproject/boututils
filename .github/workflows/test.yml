@@ -55,4 +55,5 @@ jobs:
 
       - name: Upload to codecov
         run: |
+          pip install codecov
           codecov
