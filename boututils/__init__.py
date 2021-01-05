@@ -45,18 +45,24 @@ try:
 except ModuleNotFoundError:
     from importlib_metadata import version, PackageNotFoundError
 try:
+    # This gives the version if the boututils package was installed
     __version__ = version(__name__)
 except PackageNotFoundError:
+    # This branch handles the case when boututils is used from the git repo
     try:
         from setuptools_scm import get_version
-    except ModuleNotFoundError as e:
-        error_info = (
-            "'setuptools_scm' is required to get the version number when running "
-            "boututils from the git repo. Please install 'setuptools_scm'."
-        )
-        print(error_info)
-        raise ModuleNotFoundError(str(e) + ". " + error_info)
-    else:
         from pathlib import Path
         path = Path(__file__).resolve()
         __version__ = get_version(root="..", relative_to=path)
+    except (ModuleNotFoundError, LookupError) as e:
+        # ModuleNotFoundError if setuptools_scm is not installed.
+        # LookupError if git is not installed, or the code is not in a git repo even
+        # though it has not been installed.
+        from warnings import warn
+        warn(
+            "'setuptools_scm' and git are required to get the version number when "
+            "running boututils from the git repo. Please install 'setuptools_scm' and "
+            "check 'git rev-parse HEAD' works. Setting __version__='dev' as a "
+            "workaround."
+        )
+        __version__ = "dev"
