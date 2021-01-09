@@ -41,7 +41,7 @@ def volume_integral(var, grid, xr=False):
 
         result = np.zeros(nt)
         for t in range(nt):
-            result[t] = volume_integral(var[t, :, :, :], g, xr=xr)
+            result[t] = volume_integral(var[t, :, :, :], grid, xr=xr)
         return result
 
     elif s == 3:
@@ -55,7 +55,7 @@ def volume_integral(var, grid, xr=False):
             for y in range(ny):
                 zi[x, y] = np.mean(var[x, y, :])
 
-        return volume_integral(zi, g, xr=xr)
+        return volume_integral(zi, grid, xr=xr)
 
     elif s != 2:
         print("ERROR: volume_integral var must be 2, 3 or 4D")
@@ -64,7 +64,7 @@ def volume_integral(var, grid, xr=False):
     nx = np.shape(var)[0]
     ny = np.shape(var)[1]
 
-    if xr == False:
+    if not xr:
         xr = [0, nx - 1]
 
     result = 0.0
@@ -84,7 +84,7 @@ def volume_integral(var, grid, xr=False):
             dtheta = 2.0 * np.pi / np.float(ny)
             r = grid["Rxy"][xi, yi]
             z = grid["Zxy"][xi, yi]
-            n = np.size(r)
+            # n = np.size(r)
             dl = old_div(np.sqrt(deriv(r) ** 2 + deriv(z) ** 2), dtheta)
 
             # Area of flux-surface

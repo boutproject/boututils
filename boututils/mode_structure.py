@@ -18,6 +18,7 @@ from .ask import query_yes_no
 # ;              for producing plots similar to the ERGOS
 # ;              vacuum RMP code
 
+
 # interpolates a 1D periodic function
 def zinterp(v, zind):
 
@@ -82,7 +83,8 @@ def mode_structure(
         else:
             n = period
 
-    #  if (grid_in.JYSEPS1_1 GE 0) OR (grid_in.JYSEPS1_2 NE grid_in.JYSEPS2_1) OR (grid_in.JYSEPS2_2 NE grid_in.ny-1) THEN BEGIN
+    #  if (grid_in.JYSEPS1_1 GE 0) OR (grid_in.JYSEPS1_2 NE grid_in.JYSEPS2_1) OR
+    #  (grid_in.JYSEPS2_2 NE grid_in.ny-1) THEN BEGIN
     #  PRINT, "Mesh contains branch-cuts. Keeping only core"
     #
     #  grid = core_mesh(grid_in)
@@ -404,7 +406,8 @@ def mode_structure(
 #          IF KEYWORD_SET(addq) THEN BEGIN
 #
 #              FOR i=0, pmodes-1 DO BEGIN
-#                  PRINT, "m = "+STRTRIM(STRING(inds[i]+1), 2)+" amp = "+STRTRIM(STRING(fmax[inds[i]]),2)
+#                  PRINT, "m = "+STRTRIM(STRING(inds[i]+1), 2)+" amp = "
+#                  +STRTRIM(STRING(fmax[inds[i]]),2)
 #                  q = FLOAT(inds[i]+1) / FLOAT(n)
 #
 #                  pos = INTERPOL(xarr, qprof, q)

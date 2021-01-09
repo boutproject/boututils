@@ -8,6 +8,7 @@ from __future__ import division, print_function
 from builtins import range, str, zip
 
 import numpy
+from bunch import Bunch
 from crosslines import find_inter
 from matplotlib.pyplot import annotate, contour, draw, gradient, plot
 from past.utils import old_div
@@ -61,7 +62,7 @@ def analyse_equil(F, R, Z):
 
     draw()
 
-    ### 1st method - line crossings ---------------------------
+    # ## 1st method - line crossings ---------------------------
     res = find_inter(contour1, contour2)
 
     # rex1=numpy.interp(res[0],  R, numpy.arange(R.size)).astype(int)
@@ -77,7 +78,7 @@ def analyse_equil(F, R, Z):
     rex1 = rex1[w].flatten()
     zex1 = zex1[w].flatten()
 
-    ### 2nd method - local maxima_minima -----------------------
+    # ## 2nd method - local maxima_minima -----------------------
     res1 = local_min_max.detect_local_minima(F)
     res2 = local_min_max.detect_local_maxima(F)
     res = numpy.append(res1, res2, 1)

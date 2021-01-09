@@ -21,7 +21,7 @@ def aligned_points(grid, nz=1, period=1.0, maxshift=0.4):
         print("Missing required data")
         return None
 
-    dz = 2.0 * pi / (period * (nz - 1))
+    # dz = 2.0 * pi / (period * (nz - 1))
     phi0 = np.linspace(0, 2.0 * pi / period, nz)
 
     # Need to insert additional points in Y so mesh looks smooth
@@ -94,10 +94,10 @@ def view3d(sgrid):
 
     e = Engine()
     e.start()
-    s = e.new_scene()
+    _ = e.new_scene()
     # Do this if you need to see the MayaVi tree view UI.
     ev = EngineView(engine=e)
-    ui = ev.edit_traits()
+    _ = ev.edit_traits()
 
     #    mayavi.new_scene()
     src = VTKDataSource(data=sgrid)

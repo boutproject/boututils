@@ -1,7 +1,8 @@
 """
 Contour calculation routines
 
-https://web.archive.org/web/20140901225541/https://members.bellatlantic.net/~vze2vrva/thesis.html"""
+https://web.archive.org/web/20140901225541/https://members.bellatlantic.net/~vze2vrva/thesis.html
+"""
 from __future__ import division, print_function
 
 import numpy as np
@@ -33,12 +34,12 @@ def contour(f, level):
                 continue
 
             # Check each edge
-            ncross = 0
+            ncross = 0  # noqa: F823
 
             def location(a, b):
                 if (a > level) ^ (a > level):
                     # One of the corners is > level, and the other is <= level
-                    ncross += 1
+                    ncross += 1  # noqa: F841, F823
                     # Find location
                     return old_div((level - a), (b - a))
                 else:

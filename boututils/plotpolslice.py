@@ -47,7 +47,8 @@ def zinterp(v, zind):
 
 
 def plotpolslice(var3d, gridfile, period=1, zangle=0.0, rz=1, fig=0):
-    """ data2d = plotpolslice(data3d, 'gridfile' , period=1, zangle=0.0, rz:return (r,z) grid also=1, fig: to do the graph, set to 1 ) """
+    """data2d = plotpolslice(data3d, 'gridfile' , period=1, zangle=0.0,
+    rz:return (r,z) grid also=1, fig: to do the graph, set to 1 )"""
 
     g = file_import(gridfile)
 
@@ -86,7 +87,8 @@ def plotpolslice(var3d, gridfile, period=1, zangle=0.0, rz=1, fig=0):
         for x in range(nx):
             zind = old_div((zangle - zShift[x, y]), dz)
             var2d[x, ypos] = zinterp(var3d[x, y, :], zind)
-            #     IF KEYWORD_SET(profile) THEN var2d[x,ypos] = var2d[x,ypos] + profile[x,y]
+            #     IF KEYWORD_SET(profile) THEN var2d[x,ypos] =
+            #     var2d[x,ypos] + profile[x,y]
             r[x, ypos] = rxy[x, y]
             z[x, ypos] = zxy[x, y]
 
@@ -109,7 +111,8 @@ def plotpolslice(var3d, gridfile, period=1, zangle=0.0, rz=1, fig=0):
                 var2d[x, ypos + i] = w * zinterp(var3d[x, y + 1, :], zi) + (
                     1.0 - w
                 ) * zinterp(var3d[x, y, :], zi)
-                #  IF KEYWORD_SET(profile) THEN var2d[x,ypos+i] = var2d[x,ypos+i] + w*profile[x,y+1] + (1.0-w)*profile[x,y]
+                #  IF KEYWORD_SET(profile) THEN var2d[x,ypos+i] =
+                #  var2d[x,ypos+i] + w*profile[x,y+1] + (1.0-w)*profile[x,y]
                 r[x, ypos + i] = w * rxy[x, y + 1] + (1.0 - w) * rxy[x, y]
                 z[x, ypos + i] = w * zxy[x, y + 1] + (1.0 - w) * zxy[x, y]
 

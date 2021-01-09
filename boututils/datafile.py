@@ -25,8 +25,6 @@ TODO
 
 from __future__ import print_function
 
-import getpass
-import time
 from builtins import map, object, str, zip
 
 import numpy as np
@@ -91,7 +89,7 @@ class DataFile(object):
 
         NetCDF formats are described here: https://unidata.github.io/netcdf4-python/
         - NETCDF3_CLASSIC   Limited to 2.1Gb files
-        - NETCDF3_64BIT_OFFSET or NETCDF3_64BIT is an extension to allow larger file sizes
+        - NETCDF3_64BIT_OFFSET or NETCDF3_64BIT is an extension to allow larger files
         - NETCDF3_64BIT_DATA adds 64-bit integer data types and 64-bit dimension sizes
         - NETCDF4 and NETCDF4_CLASSIC use HDF5 as the disk format
         """
@@ -955,7 +953,7 @@ class DataFile_HDF5(DataFile):
         # attributes from data, which it should be if data is a BoutArray.
         # Otherwise, need to write it explicitly
         try:
-            if not "bout_type" in data.attributes:
+            if "bout_type" not in data.attributes:
                 raise AttributeError("'bout_type' not found in attributes")
         except AttributeError:
             self.handle[name].attrs.create(
@@ -986,7 +984,7 @@ class DataFile_HDF5(DataFile):
                     attribute = str(attribute, encoding="utf-8")
                 attributes[attrname] = attribute
 
-            if not "bout_type" in attributes:
+            if "bout_type" not in attributes:
                 # bout_type is a required attribute for BOUT++ outputs, so it should
                 # have been found
                 raise ValueError(

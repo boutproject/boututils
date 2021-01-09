@@ -24,8 +24,8 @@ def unique(a, atol=1e-08):
 
     Notes
     -----
-    Adapted to include tolerance from code at https://stackoverflow.com/questions/8560440/removing-duplicate-columns-and-rows-from-a-numpy-2d-array#answer-8564438
-
+    Adapted to include tolerance from code at
+    https://stackoverflow.com/questions/8560440/removing-duplicate-columns-and-rows-from-a-numpy-2d-array#answer-8564438
     """
 
     if np.issubdtype(a.dtype, float):
@@ -89,8 +89,10 @@ def linelineintersect(a, b, atol=1e-08):
                 ),
             )
 
-    # In the following the indices i, j represents the pairing of the ith segment of b and the jth segment of a
-    # e.g. if ignore[i,j]==True then the ith segment of b and the jth segment of a cannot intersect
+    # In the following the indices i, j represents the pairing of the ith segment of b
+    # and the jth segment of a
+    # e.g. if ignore[i,j]==True then the ith segment of b and the jth segment of a
+    # cannot intersect
     ignore = np.zeros([b.shape[0] - 1, a.shape[0] - 1], dtype=bool)
 
     x11, x21 = meshgrid_as_strided(a[:-1, 0], b[:-1, 0], mask=ignore)
@@ -104,7 +106,8 @@ def linelineintersect(a, b, atol=1e-08):
     ignore[np.ma.maximum(y11, y12) < np.ma.minimum(y21, y22)] = True
     ignore[np.ma.minimum(y11, y12) > np.ma.maximum(y21, y22)] = True
 
-    # find intersection of segments, ignoring impossible line segment pairs when new info becomes available
+    # find intersection of segments, ignoring impossible line segment pairs when new
+    # info becomes available
     denom_ = np.empty(ignore.shape, dtype=float)
     denom = np.ma.array(denom_, mask=ignore)
     denom_[:, :] = ((y22 - y21) * (x12 - x11)) - ((x22 - x21) * (y12 - y11))
@@ -159,12 +162,15 @@ def linelineintersect(a, b, atol=1e-08):
     else:
         n_nans = np.ma.sum(nans)
         n_standard = np.ma.count(x11) - n_nans
-        # I initially tried using a set to get unique points but had problems with floating point equality
+        # I initially tried using a set to get unique points but had problems with
+        # floating point equality
 
-        # create n by 2 array to hold all possible intersection points, check later for uniqueness
+        # create n by 2 array to hold all possible intersection points,
+        # check later for uniqueness
         points = np.empty(
             [n_standard + 2 * n_nans, 2], dtype=float
-        )  # each colinear segment pair has two intersections, hence the extra n_colinear points
+        )  # each colinear segment pair has two intersections,
+        # hence the extra n_colinear points
 
         # add standard intersection points
         xi = x11 + ua * (x12 - x11)
@@ -173,9 +179,10 @@ def linelineintersect(a, b, atol=1e-08):
         points[:n_standard, 1] = np.ma.compressed(yi[~nans])
         ignore[~nans] = True
 
-        # now add the appropriate intersection points for the colinear overlapping segments
-        # colinear overlapping segments intersect on the two internal points of the four points describing a straight line
-        # ua and ub have already serverd their purpose. Reuse them here to mean:
+        # now add the appropriate intersection points for the colinear overlapping
+        # segments colinear overlapping segments intersect on the two internal points
+        # of the four points describing a straight line ua and ub have already
+        # serverd their purpose. Reuse them here to mean:
         # ua is relative position of 1st b segment point along segment a
         # ub is relative position of 2nd b segment point along segment a
         use_x = x12 != x11  # avoid vertical lines diviiding by zero

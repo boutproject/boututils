@@ -1,11 +1,13 @@
 """
-View a 3D rendering of the magnetic field lines and the streamlines of the rational surfaces.
-The quality of the later can be used as an indicator of the quality of the grid. The magnetic field
-is computed from efit_analyzed.py. The script can be used as a template to show additional properties of the field
+View a 3D rendering of the magnetic field lines and the streamlines of the rational
+surfaces.
+The quality of the later can be used as an indicator of the quality of the grid.
+The magnetic field
+is computed from efit_analyzed.py.
+The script can be used as a template to show additional properties of the field
 
 based on enthought's example by Gael Varoquaux <gael.varoquaux@normalesup.org>
 https://docs.enthought.com/mayavi/mayavi/auto/example_magnetic_field.html#example-magnetic-field
-
 """
 from __future__ import absolute_import, division
 
@@ -29,7 +31,7 @@ from scipy import interpolate
 
 from boututils.View2D import View2D
 
-from .boutgrid import *
+from .boutgrid import create_grid
 from .read_geqdsk import read_geqdsk
 
 
@@ -47,25 +49,28 @@ def View3D(g, path=None, gb=None):
     ##############################################################################
     # The grid of points on which we want to evaluate the field
     X, Y, Z = np.mgrid[-rd : rd : n * 1j, -rd : rd : n * 1j, -zd : zd : n * 1j]
-    ## Avoid rounding issues :
+    # # Avoid rounding issues :
     # f = 1e4  # this gives the precision we are interested by :
     # X = np.round(X * f) / f
     # Y = np.round(Y * f) / f
     # Z = np.round(Z * f) / f
 
-    r = np.c_[X.ravel(), Y.ravel(), Z.ravel()]
+    # r = np.c_[X.ravel(), Y.ravel(), Z.ravel()]
 
     ##############################################################################
     # Calculate field
     # First initialize a container matrix for the field vector :
-    B = np.empty_like(r)
+    # B = np.empty_like(r)
 
     # Compute Toroidal field
     # fpol is given between simagx (psi on the axis) and sibdry (
-    # psi on limiter or separatrix). So the toroidal field (fpol/R) and the q profile are within these boundaries
-    # For each r,z we have psi thus we get fpol if (r,z) is within the boundary (limiter or separatrix) and fpol=fpol(outer_boundary) for outside
+    # psi on limiter or separatrix). So the toroidal field (fpol/R) and the q profile
+    # are within these boundaries
+    # For each r,z we have psi thus we get fpol if (r,z) is within the boundary
+    # (limiter or separatrix) and fpol=fpol(outer_boundary) for outside
 
-    # The range of psi is g.psi.max(), g.psi.min() but we have f(psi) up to the limit. Thus we use a new extended variable padded up to max psi
+    # The range of psi is g.psi.max(), g.psi.min() but we have f(psi) up to the limit.
+    # Thus we use a new extended variable padded up to max psi
     # set points between psi_limit and psi_max
 
     add_psi = np.linspace(g.sibdry, g.psi.max(), 10)
@@ -103,8 +108,8 @@ def View3D(g, path=None, gb=None):
         g, X, Y, Z, rmin, rmax, zmin, zmax, Br, Bz, Btrz
     )
 
-    bpnorm = np.sqrt(B1p ** 2 + B2p ** 2 + B3p ** 2)
-    btnorm = np.sqrt(B1t ** 2 + B2t ** 2 + B3t ** 2)
+    # bpnorm = np.sqrt(B1p ** 2 + B2p ** 2 + B3p ** 2)
+    # btnorm = np.sqrt(B1t ** 2 + B2t ** 2 + B3t ** 2)
 
     BBx = B1p + B1t
     BBy = B2p + B2t
@@ -129,13 +134,13 @@ def View3D(g, path=None, gb=None):
 
     mlab.clf()
 
-    fieldp = mlab.pipeline.vector_field(
-        X, Y, Z, B1p, B2p, B3p, scalars=bpnorm, name="Bp field"
-    )
-
-    fieldt = mlab.pipeline.vector_field(
-        X, Y, Z, B1t, B2t, B3t, scalars=btnorm, name="Bt field"
-    )
+    # fieldp = mlab.pipeline.vector_field(
+    #     X, Y, Z, B1p, B2p, B3p, scalars=bpnorm, name="Bp field"
+    # )
+    #
+    # fieldt = mlab.pipeline.vector_field(
+    #     X, Y, Z, B1t, B2t, B3t, scalars=btnorm, name="Bt field"
+    # )
 
     field = mlab.pipeline.vector_field(
         X, Y, Z, BBx, BBy, BBz, scalars=btotal, name="B field"
@@ -212,14 +217,14 @@ def View3D(g, path=None, gb=None):
 
         s = mlab.pipeline.streamline(field)
         s.streamline_type = "line"
-        ##s.seed.widget = s.seed.widget_list[0]
-        ##s.seed.widget.center = 0.0, 0.0, 0.0
-        ##s.seed.widget.radius = 1.725
-        ##s.seed.widget.phi_resolution = 16
-        ##s.seed.widget.handle_direction =[ 1.,  0.,  0.]
-        ##s.seed.widget.enabled = False
-        ##s.seed.widget.enabled = True
-        ##s.seed.widget.enabled = False
+        # s.seed.widget = s.seed.widget_list[0]
+        # s.seed.widget.center = 0.0, 0.0, 0.0
+        # s.seed.widget.radius = 1.725
+        # s.seed.widget.phi_resolution = 16
+        # s.seed.widget.handle_direction =[ 1.,  0.,  0.]
+        # s.seed.widget.enabled = False
+        # s.seed.widget.enabled = True
+        # s.seed.widget.enabled = False
         #
         if x[i].size > 1:
             s.seed.widget = s.seed.widget_list[3]
@@ -265,7 +270,7 @@ def View3D(g, path=None, gb=None):
         # data=data+data0[:,:,None]
 
         s = np.shape(data)
-        nz = s[2]
+        # nz = s[2]
 
         sgrid = create_grid(gb, data, 1)
 
@@ -274,7 +279,7 @@ def View3D(g, path=None, gb=None):
         # gr=mlab.pipeline.grid_plane(sgrid)
         # gr.grid_plane.axis='x'
 
-        ## pressure scalar cut plane from bout
+        # pressure scalar cut plane from bout
         scpb = mlab.pipeline.scalar_cut_plane(
             sgrid, colormap="jet", plane_orientation="x_axes"
         )
@@ -335,7 +340,7 @@ def magnetic_field(g, X, Y, Z, rmin, rmax, zmin, zmax, Br, Bz, Btrz):
     nx, ny, nz = np.shape(X)
 
     mask = (rho >= rmin) & (rho <= rmax) & (Z >= zmin) & (Z <= zmax)
-    k = np.argwhere(mask == True)
+    k = np.argwhere(mask is True)
 
     fr = interpolate.interp2d(g.r[:, 0], g.z[0, :], Br.T)
     fz = interpolate.interp2d(g.r[:, 0], g.z[0, :], Bz.T)
@@ -375,7 +380,7 @@ def psi_field(g, X, Y, Z, rmin, rmax, zmin, zmax):
     nx, ny, nz = np.shape(X)
 
     mask = (rho >= rmin) & (rho <= rmax) & (Z >= zmin) & (Z <= zmax)
-    k = np.argwhere(mask == True)
+    k = np.argwhere(mask is True)
 
     f = interpolate.interp2d(g.r[:, 0], g.z[0, :], g.psi.T)
 

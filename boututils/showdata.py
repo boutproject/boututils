@@ -11,7 +11,6 @@ from __future__ import division, print_function
 
 from builtins import chr, range, str
 
-from boutdata.collect import collect
 from matplotlib import animation
 from matplotlib import pyplot as plt
 from numpy import abs, array, floor, isclose, linspace, max, meshgrid, min, pi
@@ -185,7 +184,8 @@ def showdata(
             titles.append(("Var" + str(i + 1)))
     elif len(titles) != Nvar:
         raise ValueError(
-            "The length of the titles input list must match the length of the vars list."
+            "The length of the titles input list must match the length of the vars "
+            "list."
         )
 
     # Sort out legend labels
@@ -202,7 +202,9 @@ def showdata(
                     check = check + 1
             if check == 0:
                 alwayswarn(
-                    "The legendlabels list does not contain a sublist for each variable, but its length matches the number of lines on each plot. Will apply labels to each plot"
+                    "The legendlabels list does not contain a sublist for each "
+                    "variable, but its length matches the number of lines on each plot."
+                    " Will apply labels to each plot"
                 )
                 legendlabelsdummy = []
                 for i in range(0, Nvar):
@@ -212,7 +214,9 @@ def showdata(
                 legendlabels = legendlabelsdummy
             else:
                 alwayswarn(
-                    "The legendlabels list does not contain a sublist for each variable, and it's length does not match the number of lines on each plot. Will default apply labels to each plot"
+                    "The legendlabels list does not contain a sublist for each "
+                    "variable, and it's length does not match the number of lines on "
+                    "each plot. Will default apply labels to each plot"
                 )
                 legendlabels = []
                 for i in range(0, Nvar):
@@ -224,7 +228,8 @@ def showdata(
                 legendlabels = [legendlabels]
     elif len(legendlabels) != Nvar:
         alwayswarn(
-            "The length of the legendlabels list does not match the length of the vars list, will continue with default values"
+            "The length of the legendlabels list does not match the length of the vars "
+            "list, will continue with default values"
         )
         legendlabels = []
         for i in range(0, Nvar):
@@ -236,7 +241,9 @@ def showdata(
             if isinstance(legendlabels[i], list):
                 if len(legendlabels[i]) != Nlines[i]:
                     alwayswarn(
-                        "The length of the legendlabel (sub)list for each plot does not match the number of datasets for each plot. Will continue with default values"
+                        "The length of the legendlabel (sub)list for each plot does not"
+                        " match the number of datasets for each plot. "
+                        "Will continue with default values"
                     )
                 legendlabels[i] = []
                 for j in range(0, Nlines[i]):
@@ -245,7 +252,9 @@ def showdata(
                 legendlabels[i] = [legendlabels[i]]
             if len(legendlabels[i]) != Nlines[i]:
                 alwayswarn(
-                    "The length of the legendlabel (sub)list for each plot does not match the number of datasets for each plot.  Will continue with default values"
+                    "The length of the legendlabel (sub)list for each plot does not "
+                    "match the number of datasets for each plot. "
+                    "Will continue with default values"
                 )
                 legendlabels[i] = []
                 for j in range(0, Nlines[i]):
@@ -272,7 +281,8 @@ def showdata(
                 surf.append(0)
         else:
             alwayswarn(
-                "Length of surf list does not match number of variables.  Will default to no polar plots"
+                "Length of surf list does not match number of variables. "
+                "Will default to no polar plots"
             )
             for i in range(0, Nvar):
                 surf.append(0)
@@ -308,7 +318,8 @@ def showdata(
                 polar.append(0)
         else:
             alwayswarn(
-                "Length of polar list does not match number of variables.  Will default to no polar plots"
+                "Length of polar list does not match number of variables. "
+                "Will default to no polar plots"
             )
             for i in range(0, Nvar):
                 polar.append(0)
@@ -342,22 +353,26 @@ def showdata(
 
             if (Ndims[i][j] == 2) & (polar[i] != 0):
                 alwayswarn(
-                    "Data must be  3 dimensional (time, r, theta) for polar plots.  Will plot lineplot instead"
+                    "Data must be  3 dimensional (time, r, theta) for polar plots. "
+                    "Will plot lineplot instead"
                 )
 
             if (Ndims[i][j] == 2) & (surf[i] != 0):
                 alwayswarn(
-                    "Data must be  3 dimensional (time, x, y) for surface plots.  Will plot lineplot instead"
+                    "Data must be  3 dimensional (time, x, y) for surface plots. "
+                    "Will plot lineplot instead"
                 )
 
             if (Ndims[i][j] == 3) & (Nlines[i] != 1):
                 raise ValueError(
-                    "cannot have multiple sets of 3D (time + 2 spatial dimensions) on each subplot"
+                    "cannot have multiple sets of 3D (time + 2 spatial dimensions) on "
+                    "each subplot"
                 )
 
             if Ndims[i][j] != Ndims[i][0]:
                 raise ValueError(
-                    "Error, Number of dimensions must be the same for all variables on each plot."
+                    "Error, Number of dimensions must be the same for all variables on"
+                    " each plot."
                 )
 
         if Ndims[i][0] == 2:  # Set polar and surf list entries to 0
@@ -368,7 +383,8 @@ def showdata(
         else:
             if (polar[i] == 1) & (surf[i] == 1):
                 alwayswarn(
-                    "Cannot do polar and surface plots at the same time.  Default to contour plot"
+                    "Cannot do polar and surface plots at the same time. "
+                    "Default to contour plot"
                 )
                 contour.append(1)
                 lineplot.append(0)
@@ -396,7 +412,8 @@ def showdata(
                 raise ValueError("time dimensions must be the same for all variables.")
 
             # if (Nx[i][j] != Nx[i][0]):
-            #    raise ValueError('Dimensions must be the same for all variables on each plot.')
+            #    raise ValueError('Dimensions must be the same for all variables on
+            #    each plot.')
 
             if Ndims[i][j] == 3:
                 Ny[i].append(vars[i][j].shape[2])
@@ -429,7 +446,8 @@ def showdata(
                     + str(i)
                     + ", "
                     + titles[i]
-                    + ", the shape of x is not compatible with the shape of the variable. Shape of x should be (Nx), (Nx,Ny) or (Nt,Nx,Ny)."
+                    + ", the shape of x is not compatible with the shape of the "
+                    "variable. Shape of x should be (Nx), (Nx,Ny) or (Nt,Nx,Ny)."
                 )
         except:
             for j in range(0, Nlines[i]):
@@ -450,7 +468,8 @@ def showdata(
                         + str(i)
                         + ", "
                         + titles[i]
-                        + ", the shape of y is not compatible with the shape of the variable. Shape of y should be (Ny), (Nx,Ny) or (Nt,Nx,Ny)."
+                        + ", the shape of y is not compatible with the shape of the "
+                        "variable. Shape of y should be (Ny), (Nx,Ny) or (Nt,Nx,Ny)."
                     )
             except:
                 ynew.append(linspace(0, Ny[i][0] - 1, Ny[i][0]))
@@ -697,9 +716,7 @@ def showdata(
             if (
                 clear_between_frames is None and lineplot[j] != 1
             ) or clear_between_frames is True:
-                ax[
-                    j
-                ].cla()  # Clear axis between frames so that masked arrays can be plotted
+                ax[j].cla()  # Clear axis between frames so masked arrays can be plotted
             if lineplot[j] == 1:
                 for k in range(0, Nlines[j]):
                     lines[j][k].set_data(x[j][k], vars[j][k][index, :])

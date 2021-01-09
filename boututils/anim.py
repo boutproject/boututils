@@ -13,11 +13,11 @@ from boutdata.collect import collect
 
 try:
     from enthought.mayavi import mlab
-    from enthought.mayavi.mlab import *
+    from enthought.mayavi.mlab import colorbar, contour_surf, surf
 except ImportError:
     try:
         from mayavi import mlab
-        from mayavi.mlab import *
+        from mayavi.mlab import colorbar, contour_surf, surf
     except ImportError:
         print("No mlab available")
 
@@ -55,7 +55,7 @@ def anim(s, d, *args, **kwargs):
     nt = d.shape[0]
 
     print("animating for ", nt, "timesteps")
-    if save == True:
+    if save:
         print("Saving pics in folder Movie")
         if not os.path.exists("Movie"):
             os.makedirs("Movie")
@@ -66,7 +66,7 @@ def anim(s, d, *args, **kwargs):
             s1.mlab_source.scalars = d[i, :, :]
         title = "t=" + np.string0(i)
         mlab.title(title, height=1.1, size=0.26)
-        if save == True:
+        if save:
             mlab.savefig("Movie/anim%d.png" % i)
         yield
 
@@ -83,7 +83,7 @@ if __name__ == "__main__":
     ne = data.shape[2]
     nz = data.shape[3]
 
-    f = mayavi.mlab.figure(size=(600, 600))
+    f = mlab.figure(size=(600, 600))
     # Tell visual to use this as the viewer.
     visual.set_viewer(f)
 
@@ -99,7 +99,8 @@ if __name__ == "__main__":
     # second way
 
     # x, y= mgrid[0:ns:1, 0:ne:1]
-    # s = mesh(x,y,data[0,:,:,10], colormap='Spectral')#, warp_scale='auto')#, representation='wireframe')
+    # s = mesh(x,y,data[0,:,:,10], colormap='Spectral')#, warp_scale='auto')
+    # #, representation='wireframe')
     s.enable_contours = True
     s.contour.filled_contours = True
     #

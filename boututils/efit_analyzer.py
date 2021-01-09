@@ -22,12 +22,13 @@ from pylab import (
 )
 from scipy import interpolate
 
-from boututils.bunch import Bunch
-
 from .analyse_equil_2 import analyse_equil
 from .ask import query_yes_no
-from .radial_grid import radial_grid
+
+# from .radial_grid import radial_grid
 from .read_geqdsk import read_geqdsk
+
+# from boututils.bunch import Bunch
 
 
 def View2D(g, option=0):
@@ -84,7 +85,8 @@ def View2D(g, option=0):
     #  show(block=False)
 
     # Function fpol and qpsi are given between simagx (psi on the axis) and sibdry (
-    # psi on limiter or separatrix). So the toroidal field (fpol/R) and the q profile are within these boundaries
+    # psi on limiter or separatrix). So the toroidal field (fpol/R) and the q profile
+    # are within these boundaries
 
     npsigrid = old_div(np.arange(np.size(g.pres)).astype(float), (np.size(g.pres) - 1))
 
@@ -92,61 +94,61 @@ def View2D(g, option=0):
     fpsi[0, :] = g.simagx + npsigrid * (g.sibdry - g.simagx)
     fpsi[1, :] = g.fpol
 
-    boundary = np.array([g.xlim, g.ylim])
-
-    rz_grid = Bunch(
-        nr=g.nx,
-        nz=g.ny,  # Number of grid points
-        r=g.r[:, 0],
-        z=g.z[0, :],  # R and Z as 1D arrays
-        simagx=g.simagx,
-        sibdry=g.sibdry,  # Range of psi
-        psi=g.psi,  # Poloidal flux in Weber/rad on grid points
-        npsigrid=npsigrid,  # Normalised psi grid for fpol, pres and qpsi
-        fpol=g.fpol,  # Poloidal current function on uniform flux grid
-        pres=g.pres,  # Plasma pressure in nt/m^2 on uniform flux grid
-        qpsi=g.qpsi,  # q values on uniform flux grid
-        nlim=g.nlim,
-        rlim=g.xlim,
-        zlim=g.ylim,
-    )  # Wall boundary
+    # boundary = np.array([g.xlim, g.ylim])
+    #
+    # rz_grid = Bunch(
+    #     nr=g.nx,
+    #     nz=g.ny,  # Number of grid points
+    #     r=g.r[:, 0],
+    #     z=g.z[0, :],  # R and Z as 1D arrays
+    #     simagx=g.simagx,
+    #     sibdry=g.sibdry,  # Range of psi
+    #     psi=g.psi,  # Poloidal flux in Weber/rad on grid points
+    #     npsigrid=npsigrid,  # Normalised psi grid for fpol, pres and qpsi
+    #     fpol=g.fpol,  # Poloidal current function on uniform flux grid
+    #     pres=g.pres,  # Plasma pressure in nt/m^2 on uniform flux grid
+    #     qpsi=g.qpsi,  # q values on uniform flux grid
+    #     nlim=g.nlim,
+    #     rlim=g.xlim,
+    #     zlim=g.ylim,
+    # )  # Wall boundary
 
     critical = analyse_equil(g.psi, g.r[:, 0], g.z[0, :])
 
-    n_opoint = critical.n_opoint
-    n_xpoint = critical.n_xpoint
+    # n_opoint = critical.n_opoint
+    # n_xpoint = critical.n_xpoint
     primary_opt = critical.primary_opt
-    inner_sep = critical.inner_sep
+    # inner_sep = critical.inner_sep
     opt_ri = critical.opt_ri
     opt_zi = critical.opt_zi
-    opt_f = critical.opt_f
-    xpt_ri = critical.xpt_ri
-    xpt_zi = critical.xpt_zi
-    xpt_f = critical.xpt_f
+    # opt_f = critical.opt_f
+    # xpt_ri = critical.xpt_ri
+    # xpt_zi = critical.xpt_zi
+    # xpt_f = critical.xpt_f
+    #
+    # psi_inner = 0.6
+    # psi_outer = (0.8,)
+    # nrad = 68
+    # npol = 64
+    # rad_peaking = [0.0]
+    # pol_peaking = [0.0]
+    # parweight = 0.0
 
-    psi_inner = 0.6
-    psi_outer = (0.8,)
-    nrad = 68
-    npol = 64
-    rad_peaking = [0.0]
-    pol_peaking = [0.0]
-    parweight = 0.0
-
-    boundary = np.array([rz_grid.rlim, rz_grid.zlim])
+    # boundary = np.array([rz_grid.rlim, rz_grid.zlim])
 
     # Psi normalisation factors
 
-    faxis = critical.opt_f[critical.primary_opt]
-
-    fnorm = critical.xpt_f[critical.inner_sep] - critical.opt_f[critical.primary_opt]
+    # faxis = critical.opt_f[critical.primary_opt]
+    #
+    # fnorm = critical.xpt_f[critical.inner_sep] - critical.opt_f[critical.primary_opt]
 
     # From normalised psi, get range of f
-    f_inner = faxis + np.min(psi_inner) * fnorm
-    f_outer = faxis + np.max(psi_outer) * fnorm
+    # f_inner = faxis + np.min(psi_inner) * fnorm
+    # f_outer = faxis + np.max(psi_outer) * fnorm
 
-    fvals = radial_grid(nrad, f_inner, f_outer, 1, 1, [xpt_f[inner_sep]], rad_peaking)
+    # fvals = radial_grid(nrad, f_inner, f_outer, 1, 1, [xpt_f[inner_sep]], rad_peaking)
 
-    ## Create a starting surface
+    # # Create a starting surface
     # sind = np.int(nrad / 2)
     # start_f = 0. #fvals[sind]
 
@@ -161,7 +163,8 @@ def View2D(g, option=0):
     )
     fpsiq = interpolate.interp1d(g.qpsi, psiq)
 
-    # Find how many rational surfaces we have within the boundary and locate x,y position of curves
+    # Find how many rational surfaces we have within the boundary and locate x,y
+    # position of curves
 
     nmax = g.qpsi.max().astype(int)
     nmin = g.qpsi.min().astype(int)
@@ -224,7 +227,7 @@ def View2D(g, option=0):
     if option == 0:
         sm = query_yes_no("Overplot vector field")
         if sm:
-            lw = 50 * Bprz / Bprz.max()
+            # lw = 50 * Bprz / Bprz.max()
             streamplot(
                 g.r.T, g.z.T, Br.T, Bz.T, color=Bprz, linewidth=2, cmap=cm.bone
             )  # density =[.5, 1], color='k')#, linewidth=lw)
@@ -281,7 +284,7 @@ def View2D(g, option=0):
     ax = subplot2grid((3, 3), (2, 1), colspan=2, rowspan=1)
 
     ax.plot(psiq, g.qpsi)
-    ax.set_xlabel("$\psi$")
+    ax.set_xlabel(r"$\psi$")
     ax.set_ylabel("$q$")
     ax.yaxis.label.set_rotation("horizontal")
     ax.yaxis.label.set_size(20)
@@ -320,7 +323,7 @@ def View2D(g, option=0):
         return Br, Bz, x, y, psi
 
 
-## output to files
+# # output to files
 # np.savetxt('../data.in', np.reshape([g.nx, g.ny],(1,2)), fmt='%i, %i')
 # f_handle = open('../data.in', 'a')
 # np.savetxt(f_handle,np.reshape([g.rmagx, g.zmagx],(1,2)), fmt='%e, %e')
@@ -349,7 +352,8 @@ def View2D(g, option=0):
 
 def surface(cs, i, f, opt_ri, opt_zi, style, iplot=0):
 
-    #  contour_lines( F, np.arange(nx).astype(float), np.arange(ny).astype(float), levels=[start_f])
+    #  contour_lines( F, np.arange(nx).astype(float), np.arange(ny).astype(float),
+    #  levels=[start_f])
     #    cs=contour( g.r, g.z, g.psi,  levels=[f])
     #    proxy = [Rectangle((0,0),1,1,fc = 'b')
     #        for pc in cs.collections]
@@ -358,8 +362,9 @@ def surface(cs, i, f, opt_ri, opt_zi, style, iplot=0):
 
     p = cs.collections[i].get_paths()
     #
-    #  You might get more than one contours for the same start_f. We need to keep the closed one
-    vn = np.zeros(np.size(p))
+    #  You might get more than one contours for the same start_f. We need to keep the
+    #  closed one
+    # vn = np.zeros(np.size(p))
 
     # find the closed contour
 
@@ -386,7 +391,7 @@ def surface(cs, i, f, opt_ri, opt_zi, style, iplot=0):
     #        yy = [yy,v[:,1]]
 
     # if np.shape(vn)[0] > 1 :
-    ## Find the surface closest to the o-point
+    # # Find the surface closest to the o-point
     #    ind = closest_line(np.size(xx), xx, yy, opt_ri, opt_zi)
     #    x=xx[ind]
     #    y=yy[ind]

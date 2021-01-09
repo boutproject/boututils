@@ -26,9 +26,8 @@ def get_order(grid_spacing, errors):
     """
     if len(errors) != len(grid_spacing):
         raise ValueError(
-            "errors (len: {}) and grid_spacing (len: {}) should be the same length".format(
-                len(errors), len(grid_spacing)
-            )
+            "errors (len: {}) and grid_spacing (len: {}) "
+            "should be the same length".format(len(errors), len(grid_spacing))
         )
 
     full_range = polyfit(log(grid_spacing), log(errors), 1)
@@ -82,9 +81,8 @@ def error_rate_table(errors, grid_sizes, label):
     """
     if len(errors) != len(grid_sizes):
         raise ValueError(
-            "errors (len: {}) and grid_sizes (len: {}) should be the same length".format(
-                len(errors), len(grid_sizes)
-            )
+            "errors (len: {}) and grid_sizes (len: {}) "
+            "should be the same length".format(len(errors), len(grid_sizes))
         )
 
     dx = 1.0 / array(grid_sizes)

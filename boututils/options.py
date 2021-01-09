@@ -91,7 +91,7 @@ class BOUTOptions(object):
             # remove white space
             line = line.replace(" ", "")
 
-            if len(line) > 0 and line[0] is not "#":
+            if len(line) > 0 and line[0] != "#":
                 # Only read lines that are not comments or blank
                 if "[" in line:
                     # Section header
@@ -140,7 +140,7 @@ class BOUTOptions(object):
         - Fix undefined variable
         """
         if section in self._sections:
-            self._sections.pop(self._sections.index(sections))
+            self._sections.pop(self._sections.index(section))
             super(BOUTOptions, self).__delattr__(section)
         else:
             print("WARNING: Section " + section + " not found.\n")

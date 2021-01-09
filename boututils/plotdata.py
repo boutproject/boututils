@@ -38,7 +38,7 @@ def plotdata(
             # Points with error bars
             if x is None:
                 x = np.arange(size)
-            errorbar(x, data, xerr, yerr)
+            plt.errorbar(x, data, xerr, yerr)
         # Line plot
         if x is None:
             plt.plot(data)
@@ -68,7 +68,7 @@ def plotdata(
 
         # Add a color bar
         if colorbar:
-            CB = plt.colorbar(shrink=0.8, extend="both")
+            _ = plt.colorbar(shrink=0.8, extend="both")
 
     else:
         print("Sorry, can't handle %d-D variables" % ndims)

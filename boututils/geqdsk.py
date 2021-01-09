@@ -39,7 +39,11 @@ class Geqdsk(object):
         self.data["nw"] = int(m.group(2)), "Number of horizontal R grid points"
         self.data["nh"] = int(m.group(3)), "Number of vertical Z grid points"
 
-        fltsPat = r"^\s*([ \-]\d\.\d+[Ee][\+\-]\d\d)([ \-]\d\.\d+[Ee][\+\-]\d\d)([ \-]\d\.\d+[Ee][\+\-]\d\d)([ \-]\d\.\d+[Ee][\+\-]\d\d)([ \-]\d\.\d+[Ee][\+\-]\d\d)\s*$"
+        fltsPat = (
+            r"^\s*([ \-]\d\.\d+[Ee][\+\-]\d\d)([ \-]\d\.\d+[Ee][\+\-]\d\d)([ \-]"
+            r"\d\.\d+[Ee][\+\-]\d\d)([ \-]\d\.\d+[Ee][\+\-]\d\d)([ \-]\d\.\d+[Ee]"
+            r"[\+\-]\d\d)\s*$"
+        )
 
         # 2nd line
         m = re.search(fltsPat, lines[1])

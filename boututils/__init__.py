@@ -3,7 +3,8 @@
 import sys
 
 try:
-    from builtins import str
+    # NOTE: This import will not be needed when python2 support is stopped
+    from builtins import str  # noqa: F401
 except ImportError:
     raise ImportError("Please install the future module to use Python 2")
 
@@ -53,7 +54,7 @@ except PackageNotFoundError:
 
         path = Path(__file__).resolve()
         __version__ = get_version(root="..", relative_to=path)
-    except (ModuleNotFoundError, LookupError) as e:
+    except (ModuleNotFoundError, LookupError):
         # ModuleNotFoundError if setuptools_scm is not installed.
         # LookupError if git is not installed, or the code is not in a git repo even
         # though it has not been installed.

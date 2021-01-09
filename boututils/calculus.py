@@ -91,12 +91,14 @@ def deriv2D(data, axis=-1, dx=1.0, noise_suppression=True):
     result = deriv2D(data, dx)
 
     output is 2D (if only one axis specified)
-    output is 3D if no axis specified [nx,ny,2] with the third dimension being [dfdx, dfdy]
+    output is 3D if no axis specified [nx,ny,2] with the third dimension being
+    [dfdx, dfdy]
 
     keywords:
     axis = 0/1  If no axis specified 2D derivative will be returned
     dx = 1.0    axis spacing, must be 2D if 2D deriv is taken - default is [1.0,1.0]
-    noise_suppression = True   noise suppressing coefficients used to take derivative - default = True
+    noise_suppression = True
+        noise suppressing coefficients used to take derivative - default = True
     """
 
     from scipy.signal import convolve

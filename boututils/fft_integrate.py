@@ -16,7 +16,7 @@ def fft_integrate(y, loop=None):
         imag = np.complex(0.0, 1.0)
 
         result = np.arange(n) * f[0]
-        loop = np.float(n) * f[0]  # return the loop integral
+        # loop = np.float(n) * f[0]  # return the loop integral
 
         f[0] = 0.0
 
