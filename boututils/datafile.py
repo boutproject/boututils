@@ -24,23 +24,28 @@ TODO
 """
 
 from __future__ import print_function
-from builtins import map, zip, str, object
+
+import getpass
+import time
+from builtins import map, object, str, zip
 
 import numpy as np
-import time
-import getpass
-from boututils.boutwarnings import alwayswarn
+
 from boututils.boutarray import BoutArray
+from boututils.boutwarnings import alwayswarn
 
 try:
     from netCDF4 import Dataset
+
     has_netCDF = True
 except ImportError:
     raise ImportError(
-        "DataFile: No supported NetCDF modules available -- requires netCDF4")
+        "DataFile: No supported NetCDF modules available -- requires netCDF4"
+    )
 
 try:
     import h5py
+
     has_h5py = True
 except ImportError:
     has_h5py = False
@@ -76,9 +81,12 @@ class DataFile(object):
     - Make `impl` and `handle` private
 
     """
+
     impl = None
 
-    def __init__(self, filename=None, write=False, create=False, format='NETCDF3_64BIT', **kwargs):
+    def __init__(
+        self, filename=None, write=False, create=False, format="NETCDF3_64BIT", **kwargs
+    ):
         """
 
         NetCDF formats are described here: https://unidata.github.io/netcdf4-python/
@@ -88,22 +96,28 @@ class DataFile(object):
         - NETCDF4 and NETCDF4_CLASSIC use HDF5 as the disk format
         """
         if filename is not None:
-            if filename.split('.')[-1] in ('hdf5', 'hdf', 'h5'):
+            if filename.split(".")[-1] in ("hdf5", "hdf", "h5"):
                 self.impl = DataFile_HDF5(
-                    filename=filename, write=write, create=create, format=format)
+                    filename=filename, write=write, create=create, format=format
+                )
             else:
                 self.impl = DataFile_netCDF(
-                    filename=filename, write=write, create=create, format=format, **kwargs)
-        elif format == 'HDF5':
+                    filename=filename,
+                    write=write,
+                    create=create,
+                    format=format,
+                    **kwargs
+                )
+        elif format == "HDF5":
             self.impl = DataFile_HDF5(
-                filename=filename, write=write, create=create,
-                format=format)
+                filename=filename, write=write, create=create, format=format
+            )
         else:
             self.impl = DataFile_netCDF(
-                filename=filename, write=write, create=create, format=format, **kwargs)
+                filename=filename, write=write, create=create, format=format, **kwargs
+            )
 
-    def open(self, filename, write=False, create=False,
-             format='NETCDF3_CLASSIC'):
+    def open(self, filename, write=False, create=False, format="NETCDF3_CLASSIC"):
         """Open the file
 
         Parameters
@@ -127,13 +141,10 @@ class DataFile(object):
         - `keys` should be more pythonic (return generator)
 
         """
-        self.impl.open(filename, write=write, create=create,
-                       format=format)
+        self.impl.open(filename, write=write, create=create, format=format)
 
     def close(self):
-        """Close a file and flush data to disk
-
-        """
+        """Close a file and flush data to disk"""
         self.impl.close()
 
     def __del__(self):
@@ -232,9 +243,7 @@ class DataFile(object):
         return self.impl.ndims(varname)
 
     def sync(self):
-        """Write pending changes to disk.
-
-        """
+        """Write pending changes to disk."""
         self.impl.sync()
 
     def size(self, varname):
@@ -328,8 +337,7 @@ class DataFile(object):
 class DataFile_netCDF(DataFile):
     handle = None
 
-    def open(self, filename, write=False, create=False,
-             format='NETCDF3_CLASSIC'):
+    def open(self, filename, write=False, create=False, format="NETCDF3_CLASSIC"):
         if (not write) and (not create):
             self.handle = Dataset(filename, "r")
         elif create:
@@ -344,8 +352,14 @@ class DataFile_netCDF(DataFile):
             self.handle.close()
         self.handle = None
 
-    def __init__(self, filename=None, write=False, create=False,
-                 format='NETCDF3_CLASSIC', **kwargs):
+    def __init__(
+        self,
+        filename=None,
+        write=False,
+        create=False,
+        format="NETCDF3_CLASSIC",
+        **kwargs
+    ):
         self._kwargs = kwargs
         if not has_netCDF:
             message = "DataFile: No supported NetCDF python-modules available"
@@ -376,8 +390,7 @@ class DataFile_netCDF(DataFile):
             var = None
             for n in list(self.handle.variables.keys()):
                 if n.lower() == name.lower():
-                    print(
-                        "WARNING: Reading '" + n + "' instead of '" + name + "'")
+                    print("WARNING: Reading '" + n + "' instead of '" + name + "'")
                     var = self.handle.variables[n]
             if var is None:
                 return None
@@ -395,12 +408,14 @@ class DataFile_netCDF(DataFile):
             if ranges:
                 if len(ranges) == 2 * ndims:
                     # Reform list of pairs of ints into slices
-                    ranges = [slice(a, b) for a, b in
-                              zip(ranges[::2], ranges[1::2])]
+                    ranges = [slice(a, b) for a, b in zip(ranges[::2], ranges[1::2])]
                 elif len(ranges) != ndims:
-                    raise ValueError("Incorrect number of elements in ranges argument "
-                                     "(got {}, expected {} or {})"
-                                     .format(len(ranges), ndims, 2 * ndims))
+                    raise ValueError(
+                        "Incorrect number of elements in ranges argument "
+                        "(got {}, expected {} or {})".format(
+                            len(ranges), ndims, 2 * ndims
+                        )
+                    )
 
                 data = var[ranges[:ndims]]
                 if asBoutArray:
@@ -462,30 +477,31 @@ class DataFile_netCDF(DataFile):
             dim = self.handle.dimensions[d]
             if dim is not None:
                 t = type(dim).__name__
-                if t == 'int':
+                if t == "int":
                     return dim
                 return len(dim)
             return 0
+
         return [dimlen(d) for d in var.dimensions]
 
     def _bout_type_from_dimensions(self, varname):
         dims = self.dimensions(varname)
 
         if any("char" in d for d in dims):
-            if 't' in dims:
+            if "t" in dims:
                 return "string_t"
             else:
                 return "string"
 
         dims_dict = {
-            ('t', 'x', 'y', 'z'): "Field3D_t",
-            ('t', 'x', 'y'): "Field2D_t",
-            ('t', 'x', 'z'): "FieldPerp_t",
-            ('t',): "scalar_t",
-            ('x', 'y', 'z'): "Field3D",
-            ('x', 'y'): "Field2D",
-            ('x', 'z'): "FieldPerp",
-            ('x',): "ArrayX",
+            ("t", "x", "y", "z"): "Field3D_t",
+            ("t", "x", "y"): "Field2D_t",
+            ("t", "x", "z"): "FieldPerp_t",
+            ("t",): "scalar_t",
+            ("x", "y", "z"): "Field3D",
+            ("x", "y"): "Field2D",
+            ("x", "z"): "FieldPerp",
+            ("x",): "ArrayX",
             (): "scalar",
         }
 
@@ -495,29 +511,34 @@ class DataFile_netCDF(DataFile):
         try:
             bout_type = data.attributes["bout_type"]
         except AttributeError:
-            defdims_list = [(),
-                            ('t',),
-                            ('x', 'y'),
-                            ('x', 'y', 'z'),
-                            ('t', 'x', 'y', 'z')]
+            defdims_list = [
+                (),
+                ("t",),
+                ("x", "y"),
+                ("x", "y", "z"),
+                ("t", "x", "y", "z"),
+            ]
             return defdims_list[len(np.shape(data))]
 
         if bout_type == "string_t":
             nt, string_length = data.shape
-            return ('t', "char" + str(string_length),)
+            return (
+                "t",
+                "char" + str(string_length),
+            )
         elif bout_type == "string":
             string_length = len(data)
             return ("char" + str(string_length),)
 
         dims_dict = {
-            "Field3D_t": ('t', 'x', 'y', 'z'),
-            "Field2D_t": ('t', 'x', 'y'),
-            "FieldPerp_t": ('t', 'x', 'z'),
-            "scalar_t": ('t',),
-            "Field3D": ('x', 'y', 'z'),
-            "Field2D": ('x', 'y'),
-            "FieldPerp": ('x', 'z'),
-            "ArrayX": ('x',),
+            "Field3D_t": ("t", "x", "y", "z"),
+            "Field2D_t": ("t", "x", "y"),
+            "FieldPerp_t": ("t", "x", "z"),
+            "scalar_t": ("t",),
+            "Field3D": ("x", "y", "z"),
+            "Field2D": ("x", "y"),
+            "FieldPerp": ("x", "z"),
+            "ArrayX": ("x",),
             "scalar": (),
         }
 
@@ -533,20 +554,20 @@ class DataFile_netCDF(DataFile):
         # Get the variable type
         t = type(data).__name__
 
-        if t == 'NoneType':
+        if t == "NoneType":
             print("DataFile: None passed as data to write. Ignoring")
             return
 
-        if t == 'ndarray' or t == 'BoutArray':
+        if t == "ndarray" or t == "BoutArray":
             # Numpy type or BoutArray wrapper for Numpy type. Get the data type
             t = data.dtype.str
 
-        if t == 'list':
+        if t == "list":
             # List -> convert to numpy array
             data = np.array(data)
             t = data.dtype.str
 
-        if (t == 'int') or (t == '<i8') or (t == 'int64'):
+        if (t == "int") or (t == "<i8") or (t == "int64"):
             # NetCDF 3 does not support type int64
             data = np.int32(data)
             t = data.dtype.str
@@ -557,8 +578,7 @@ class DataFile_netCDF(DataFile):
 
             # Check the shape of the variable
             if var.shape != s:
-                print(
-                    "DataFile: Variable already exists with different size: " + name)
+                print("DataFile: Variable already exists with different size: " + name)
                 # Fallthrough to the exception
                 raise
         except:
@@ -576,7 +596,7 @@ class DataFile_netCDF(DataFile):
                     d = self.handle.dimensions[name]
 
                     # Check if it's the correct size
-                    if type(d).__name__ == 'int':
+                    if type(d).__name__ == "int":
                         if d == size:
                             return name
                     else:
@@ -586,7 +606,7 @@ class DataFile_netCDF(DataFile):
                     # Find another with the correct size
                     for dn, d in list(self.handle.dimensions.items()):
                         # Some implementations need len(d) here, some just d
-                        if type(d).__name__ == 'int':
+                        if type(d).__name__ == "int":
                             if d == size:
                                 return dn
                         else:
@@ -603,8 +623,9 @@ class DataFile_netCDF(DataFile):
                         except KeyError:
                             # Not found. Create
                             if info:
-                                print("Defining dimension {} of size {}"
-                                      .format(dn, size))
+                                print(
+                                    "Defining dimension {} of size {}".format(dn, size)
+                                )
 
                             self.handle.createDimension(dn, size)
                             return dn
@@ -613,9 +634,8 @@ class DataFile_netCDF(DataFile):
                 except KeyError:
                     # Doesn't exist, so add
                     if info:
-                        print(
-                            "Defining dimension " + name + " of size %d" % size)
-                    if name == 't':
+                        print("Defining dimension " + name + " of size %d" % size)
+                    if name == "t":
                         size = None
 
                     self.handle.createDimension(name, size)
@@ -634,7 +654,7 @@ class DataFile_netCDF(DataFile):
                 raise Exception("Couldn't create variable")
 
         # Write the data
-        if t == 'str':
+        if t == "str":
             var[0] = data
         else:
             try:
@@ -666,7 +686,8 @@ class DataFile_netCDF(DataFile):
                 for n in list(self.handle.variables.keys()):
                     if n.lower() == varname.lower():
                         print(
-                            "WARNING: Reading '" + n + "' instead of '" + varname + "'")
+                            "WARNING: Reading '" + n + "' instead of '" + varname + "'"
+                        )
                         var = self.handle.variables[n]
                 if var is None:
                     return None
@@ -677,7 +698,8 @@ class DataFile_netCDF(DataFile):
                 attribs = var.ncattrs()  # List of attributes
                 for attrname in attribs:
                     attributes[attrname] = var.getncattr(
-                        attrname)  # Get all values and insert into map
+                        attrname
+                    )  # Get all values and insert into map
             except:
                 print("Error reading attributes for " + varname)
                 # Result will be an empty map
@@ -709,8 +731,7 @@ class DataFile_HDF5(DataFile):
             self.handle.close()
         self.handle = None
 
-    def __init__(self, filename=None, write=False, create=False,
-                 format=None):
+    def __init__(self, filename=None, write=False, create=False, format=None):
         if not has_h5py:
             message = "DataFile: No supported HDF5 python-modules available"
             raise ImportError(message)
@@ -739,8 +760,7 @@ class DataFile_HDF5(DataFile):
             var = None
             for n in self.handle:
                 if n.lower() == name.lower():
-                    print(
-                        "WARNING: Reading '" + n + "' instead of '" + name + "'")
+                    print("WARNING: Reading '" + n + "' instead of '" + name + "'")
                     var = self.handle[n]
             if var is None:
                 return None
@@ -759,12 +779,14 @@ class DataFile_HDF5(DataFile):
             if ranges:
                 if len(ranges) == 2 * ndims:
                     # Reform list of pairs of ints into slices
-                    ranges = [slice(a, b) for a, b in
-                              zip(ranges[::2], ranges[1::2])]
+                    ranges = [slice(a, b) for a, b in zip(ranges[::2], ranges[1::2])]
                 elif len(ranges) != ndims:
-                    raise ValueError("Incorrect number of elements in ranges argument "
-                                     "(got {}, expected {} or {})"
-                                     .format(len(ranges), ndims, 2 * ndims))
+                    raise ValueError(
+                        "Incorrect number of elements in ranges argument "
+                        "(got {}, expected {} or {})".format(
+                            len(ranges), ndims, 2 * ndims
+                        )
+                    )
                 # Probably a bug in h5py, work around by passing tuple
                 data = var[tuple(ranges[:ndims])]
                 if asBoutArray:
@@ -798,23 +820,24 @@ class DataFile_HDF5(DataFile):
     def dimensions(self, varname):
         bout_type = self.bout_type(varname)
         dims_dict = {
-            "Field3D_t": ('t', 'x', 'y', 'z'),
-            "FieldPerp_t": ('t', 'x', 'z'),
-            "Field2D_t": ('t', 'x', 'y'),
-            "scalar_t": ('t',),
-            "string_t": ('t', 'char'),
-            "Field3D": ('x', 'y', 'z'),
-            "FieldPerp": ('x', 'z'),
-            "Field2D": ('x', 'y'),
-            "ArrayX": ('x',),
+            "Field3D_t": ("t", "x", "y", "z"),
+            "FieldPerp_t": ("t", "x", "z"),
+            "Field2D_t": ("t", "x", "y"),
+            "scalar_t": ("t",),
+            "string_t": ("t", "char"),
+            "Field3D": ("x", "y", "z"),
+            "FieldPerp": ("x", "z"),
+            "Field2D": ("x", "y"),
+            "ArrayX": ("x",),
             "scalar": (),
-            "string": ('char',),
+            "string": ("char",),
         }
         try:
             return dims_dict[bout_type]
         except KeyError:
-            raise ValueError("Variable bout_type not recognized (got {})"
-                             .format(bout_type))
+            raise ValueError(
+                "Variable bout_type not recognized (got {})".format(bout_type)
+            )
 
     def _bout_type_from_array(self, data):
         """Get the bout_type from the array 'data'
@@ -853,20 +876,22 @@ class DataFile_HDF5(DataFile):
         except AttributeError:
             ndim = 0
         if ndim == 4:
-            return 'Field3D_t'
+            return "Field3D_t"
         elif ndim == 3:
             # not ideal, 3d field might be time-evolving 2d field,
             # 'Field2D_t', but can't think of a good way to distinguish
-            alwayswarn("Warning: assuming bout_type of 3d array is Field3D. If it "
-                       "should be a time-evolving Field2D, this may cause errors in "
-                       "dimension sizes.")
-            return 'Field3D'
+            alwayswarn(
+                "Warning: assuming bout_type of 3d array is Field3D. If it "
+                "should be a time-evolving Field2D, this may cause errors in "
+                "dimension sizes."
+            )
+            return "Field3D"
         elif ndim == 2:
-            return 'Field2D'
+            return "Field2D"
         elif ndim == 1:
-            return 'scalar_t'
+            return "scalar_t"
         elif ndim == 0:
-            return 'scalar'
+            return "scalar"
         else:
             raise ValueError("Unrecognized variable bout_type, ndims=" + str(ndim))
 
@@ -907,8 +932,7 @@ class DataFile_HDF5(DataFile):
             bout_type = self._bout_type_from_array(data)
 
         if info:
-            print("Creating variable '" + name +
-                  "' with bout_type '" + bout_type + "'")
+            print("Creating variable '" + name + "' with bout_type '" + bout_type + "'")
 
         if bout_type[-2:] == "_t":
             # time evolving fields
@@ -916,7 +940,7 @@ class DataFile_HDF5(DataFile):
             # set time dimension to None to make unlimited
             shape[0] = None
             self.handle.create_dataset(name, data=data, maxshape=shape)
-        elif bout_type == 'scalar':
+        elif bout_type == "scalar":
             # Need to create scalars as one element arrays to be compatible
             # with BOUT++ assumptions (maybe it would be better to read/write
             # scalars in BOUT++?)
@@ -931,17 +955,18 @@ class DataFile_HDF5(DataFile):
         # attributes from data, which it should be if data is a BoutArray.
         # Otherwise, need to write it explicitly
         try:
-            if (not "bout_type" in data.attributes):
+            if not "bout_type" in data.attributes:
                 raise AttributeError("'bout_type' not found in attributes")
         except AttributeError:
             self.handle[name].attrs.create(
-                'bout_type', bout_type.encode(encoding='utf-8'))
+                "bout_type", bout_type.encode(encoding="utf-8")
+            )
 
         try:
             for attrname in data.attributes:
                 attrval = data.attributes[attrname]
                 if type(attrval) == str:
-                    attrval = attrval.encode(encoding='utf-8')
+                    attrval = attrval.encode(encoding="utf-8")
                 self.handle[name].attrs.create(attrname, attrval)
         except AttributeError:
             # data is not a BoutArray, so doesn't have attributes to write
@@ -965,7 +990,8 @@ class DataFile_HDF5(DataFile):
                 # bout_type is a required attribute for BOUT++ outputs, so it should
                 # have been found
                 raise ValueError(
-                    "Error: bout_type not found in attributes of "+varname)
+                    "Error: bout_type not found in attributes of " + varname
+                )
 
             # Save the attributes for this variable to the cache
             self._attributes_cache[varname] = attributes

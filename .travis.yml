@@ -14,16 +14,16 @@ env:
 addons:
   apt:
     packages:
-    - libhdf5-serial-dev
-    - netcdf-bin
-    - libnetcdf-dev
-    - libsm6
-    - libxext6
-    - libxrender-dev
-    - libxt6
-    - libgl1-mesa-glx
-    - libfontconfig
-    - libxkbcommon-x11-0
+      - libhdf5-serial-dev
+      - netcdf-bin
+      - libnetcdf-dev
+      - libsm6
+      - libxext6
+      - libxrender-dev
+      - libxt6
+      - libgl1-mesa-glx
+      - libfontconfig
+      - libxkbcommon-x11-0
 
 install:
   - pip install setuptools_scm pytest-cov

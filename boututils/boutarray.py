@@ -63,7 +63,7 @@ class BoutArray(numpy.ndarray):
         # the default value for 'attributes', because this method sees all
         # creation of default objects - with the BoutArray.__new__ constructor,
         # but also with arr.view(BoutArray).
-        self.attributes = getattr(obj, 'attributes', None)
+        self.attributes = getattr(obj, "attributes", None)
         # We do not need to return anything
 
     def __format__(self, str):

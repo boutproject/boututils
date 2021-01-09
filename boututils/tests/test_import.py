@@ -1,4 +1,5 @@
 import unittest
+
 from boututils.datafile import DataFile
 
 
@@ -8,5 +9,5 @@ class TestImport(unittest.TestCase):
         self.assertIsInstance(d, DataFile)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

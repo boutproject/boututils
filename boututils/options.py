@@ -7,8 +7,8 @@ nick.walkden@ccfe.ac.uk
 
 """
 
-from copy import copy
 import os
+from copy import copy
 
 
 class BOUTOptions(object):
@@ -58,15 +58,15 @@ class BOUTOptions(object):
 
     def __init__(self, inp_path=None):
 
-        self._sections = ['root']
+        self._sections = ["root"]
 
         for section in self._sections:
-            super(BOUTOptions,self).__setattr__(section,{})
+            super(BOUTOptions, self).__setattr__(section, {})
 
         if inp_path is not None:
             self.read_inp(inp_path)
 
-    def read_inp(self, inp_path=''):
+    def read_inp(self, inp_path=""):
         """Read a BOUT++ input file
 
         Parameters
@@ -77,37 +77,37 @@ class BOUTOptions(object):
         """
 
         try:
-            inpfile = open(os.path.join(inp_path, 'BOUT.inp'),'r')
+            inpfile = open(os.path.join(inp_path, "BOUT.inp"), "r")
         except:
-            raise TypeError("ERROR: Could not read file "+\
-                    os.path.join(inp_path, "BOUT.inp"))
+            raise TypeError(
+                "ERROR: Could not read file " + os.path.join(inp_path, "BOUT.inp")
+            )
 
-        current_section = 'root'
+        current_section = "root"
         inplines = inpfile.read().splitlines()
         # Close the file after use
         inpfile.close()
         for line in inplines:
-            #remove white space
-            line = line.replace(" ","")
+            # remove white space
+            line = line.replace(" ", "")
 
-
-            if len(line) > 0 and line[0] is not '#':
-                #Only read lines that are not comments or blank
-                if '[' in line:
-                    #Section header
-                    section = line.split('[')[1].split(']')[0]
+            if len(line) > 0 and line[0] is not "#":
+                # Only read lines that are not comments or blank
+                if "[" in line:
+                    # Section header
+                    section = line.split("[")[1].split("]")[0]
                     current_section = copy(section)
                     if current_section not in self._sections:
                         self.add_section(current_section)
 
-                elif '=' in line:
-                    #option setting
-                    attribute = line.split('=')[0]
-                    value = line.split('=')[1].split('#')[0]
-                    value = value.replace("\n","")
-                    value = value.replace("\t","")
-                    value = value.replace("\r","")
-                    value = value.replace("\"","")
+                elif "=" in line:
+                    # option setting
+                    attribute = line.split("=")[0]
+                    value = line.split("=")[1].split("#")[0]
+                    value = value.replace("\n", "")
+                    value = value.replace("\t", "")
+                    value = value.replace("\r", "")
+                    value = value.replace('"', "")
                     self.__dict__[copy(current_section)][copy(attribute)] = copy(value)
                 else:
                     pass
@@ -125,7 +125,7 @@ class BOUTOptions(object):
         - Guard against wrong type
         """
         self._sections.append(section)
-        super(BOUTOptions,self).__setattr__(section,{})
+        super(BOUTOptions, self).__setattr__(section, {})
 
     def remove_section(self, section):
         """Remove a section from the options
@@ -141,9 +141,9 @@ class BOUTOptions(object):
         """
         if section in self._sections:
             self._sections.pop(self._sections.index(sections))
-            super(BOUTOptions,self).__delattr__(section)
+            super(BOUTOptions, self).__delattr__(section)
         else:
-            print("WARNING: Section "+section+" not found.\n")
+            print("WARNING: Section " + section + " not found.\n")
 
     def list_sections(self, verbose=False):
         """Return all the sections in the options
@@ -160,6 +160,6 @@ class BOUTOptions(object):
         if verbose:
             print("Sections Contained: \n")
             for section in self._sections:
-                print("\t"+section+"\n")
+                print("\t" + section + "\n")
 
         return self._sections
