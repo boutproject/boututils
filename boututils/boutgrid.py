@@ -56,7 +56,32 @@ def aligned_points(grid, nz=1, period=1.0, maxshift=0.4):
     return points
 
 def create_grid(grid, data, period=1):
+    """
+    Create a structured grid which can be plotted with Mayavi
+    or saved to a VTK file.
     
+    Example
+    -------
+    from boutdata.collect import collect
+    from boututils.file_import import file_import
+    from boututile import boutgrid
+
+    # Load grid file
+    g = file_import("bout.grd.nc")
+
+    # Load 3D data (x,y,z)
+    data = collect("P", tind=-1)[0,:,:,:]
+
+    # Create a structured grid
+    sgrid = boutgrid.create_grid(g, data, 1)
+
+    # Write structured grid to file
+    w = tvtk.XMLStructuredGridWriter(input=sgrid, file_name='sgrid.vts')
+    w.write()
+
+    # View the structured grid
+    boutgrid.view3d(sgrid)
+    """
     s = np.shape(data)
     
     nx = grid["nx"]#[0]
@@ -107,33 +132,3 @@ def view3d(sgrid):
     g = GridPlane()
     g.grid_plane.axis = 'x'
     e.add_module(g)
-
-if __name__ == '__main__':
-    from boutdata.collect import collect
-    from boututils.file_import import file_import
-    
-    #path = "/media/449db594-b2fe-4171-9e79-2d9b76ac69b6/runs/data_33/"
-    path="../data"
-
-    g = file_import("../bout.grd.nc")
-    #g = file_import("../cbm18_8_y064_x516_090309.nc")
-    #g = file_import("/home/ben/run4/reduced_y064_x256.nc")
-    
-    data = collect("P", tind=10, path=path)
-    data = data[0,:,:,:]
-    s = np.shape(data)
-    nz = s[2]
-    
-    #bkgd = collect("P0", path=path)
-    #for z in range(nz):
-     #   data[:,:,z] += bkgd
-
-    # Create a structured grid
-    sgrid = create_grid(g, data, 1)
-    
-
-    w = tvtk.XMLStructuredGridWriter(input=sgrid, file_name='sgrid.vts')
-    w.write()
-    
-    # View the structured grid
-    view3d(sgrid)
