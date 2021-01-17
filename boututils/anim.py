@@ -1,7 +1,4 @@
-#!/usr/bin/env python3
-"""Animate graph with mayavi
-
-"""
+"""Animate graph with mayavi"""
 
 from __future__ import print_function
 from builtins import range
