@@ -104,7 +104,7 @@ class DataFile(object):
                     write=write,
                     create=create,
                     format=format,
-                    **kwargs
+                    **kwargs,
                 )
         elif format == "HDF5":
             self.impl = DataFile_HDF5(
@@ -309,6 +309,12 @@ class DataFile(object):
         """
         return self.impl.write(name, data, info)
 
+    def read_file_attribute(self, name):
+        return self.impl.read_file_attribute(name)
+
+    def write_file_attribute(self, name, value):
+        return self.impl.write_file_attribute(name, value)
+
     def __getitem__(self, name):
         return self.impl.__getitem__(name)
 
@@ -356,7 +362,7 @@ class DataFile_netCDF(DataFile):
         write=False,
         create=False,
         format="NETCDF3_CLASSIC",
-        **kwargs
+        **kwargs,
     ):
         self._kwargs = kwargs
         if not has_netCDF:
@@ -669,6 +675,15 @@ class DataFile_netCDF(DataFile):
         except AttributeError:
             pass
 
+    def read_file_attribute(self, name):
+        try:
+            return getattr(self.handle, name)
+        except AttributeError:
+            raise AttributeError(f"DataFile (netCDF4) has no file attribute {name}")
+
+    def write_file_attribute(self, name, value):
+        setattr(self.handle, name, value)
+
     def attributes(self, varname):
         try:
             return self._attributes_cache[varname]
@@ -969,6 +984,15 @@ class DataFile_HDF5(DataFile):
         except AttributeError:
             # data is not a BoutArray, so doesn't have attributes to write
             pass
+
+    def read_file_attribute(self, name):
+        try:
+            return self.handle.attrs[name]
+        except KeyError:
+            raise AttributeError(f"DataFile (HDF5) has no file attribute {name}")
+
+    def write_file_attribute(self, name, value):
+        self.handle.attrs[name] = value
 
     def attributes(self, varname):
 
