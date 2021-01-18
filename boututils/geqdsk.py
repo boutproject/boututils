@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 from __future__ import division, print_function
 
 import re
@@ -40,9 +38,9 @@ class Geqdsk(object):
         self.data["nh"] = int(m.group(3)), "Number of vertical Z grid points"
 
         fltsPat = (
-            r"^\s*([ \-]\d\.\d+[Ee][\+\-]\d\d)([ \-]\d\.\d+[Ee][\+\-]\d\d)([ \-]"
-            r"\d\.\d+[Ee][\+\-]\d\d)([ \-]\d\.\d+[Ee][\+\-]\d\d)([ \-]\d\.\d+[Ee]"
-            r"[\+\-]\d\d)\s*$"
+            r"^\s*([ \-]\d\.\d+[Ee][\+\-]\d\d)([ \-]\d\.\d+[Ee][\+\-]\d\d)"
+            r"([ \-]\d\.\d+[Ee][\+\-]\d\d)([ \-]\d\.\d+[Ee][\+\-]\d\d)"
+            r"([ \-]\d\.\d+[Ee][\+\-]\d\d)\s*$"
         )
 
         # 2nd line
