@@ -1,0 +1,51 @@
+name: Test
+
+on:
+  # Run each time we push and pull requests
+  push:
+  pull_request:
+  # Cron job
+  # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows#scheduled-events-schedule
+  schedule:
+    # https://crontab.guru/#0_0_1_*_*
+    - cron: "0 0 1 * *"
+
+jobs:
+  # As we are running on different environments, we are splitting the jobs
+  # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#jobs
+  local:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        python-version: [3.7, 3.8]
+        os: [ubuntu-latest]
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Setup prerequisites
+        run:
+          sudo apt update && sudo apt install -y libhdf5-serial-dev netcdf-bin
+          libnetcdf-dev libsm6 libxext6 libxrender-dev libxt6 libgl1-mesa-glx
+          libfontconfig libxkbcommon-x11-0
+
+      - name: Install dependencies
+        run: |
+          pip install setuptools_scm pytest-cov
+          pip install .
+
+      - name: Test local run
+        run: |
+          pytest --cov=./
+
+      - name: Upload to codecov
+        run: |
+          pip install codecov
+          codecov

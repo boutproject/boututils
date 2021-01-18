@@ -2,14 +2,16 @@
 
 """
 
-from __future__ import print_function
-from __future__ import absolute_import
-from __future__ import division
+from __future__ import absolute_import, division, print_function
+
 from builtins import range
-from past.utils import old_div
+
 import numpy as np
+from past.utils import old_div
+
 from boututils.calculus import deriv
 from boututils.int_func import int_func
+
 from .idl_tabulate import idl_tabulate
 
 
@@ -34,60 +36,60 @@ def surface_average(var, grid, area=None):
 
     s = np.ndim(var)
 
-    if s == 4 :
+    if s == 4:
         nx = np.shape(var)[1]
         ny = np.shape(var)[2]
         nt = np.shape(var)[0]
 
-        result = np.zeros((nx,nt))
-        for t in range (nt):
-            result[:,t] = surface_average(var[t,:,:,:], grid, area=area)
+        result = np.zeros((nx, nt))
+        for t in range(nt):
+            result[:, t] = surface_average(var[t, :, :, :], grid, area=area)
 
         return result
-    elif s != 3 :
+    elif s != 3:
         raise RuntimeError("ERROR: surface_average var must be 3D or 4D")
 
     # 3D [x,y,z]
     nx = np.shape(var)[0]
     ny = np.shape(var)[1]
 
-
     # Calculate poloidal angle from grid
-    theta = np.zeros((nx,ny))
+    theta = np.zeros((nx, ny))
 
-    #status = gen_surface(mesh=grid) ; Start generator
+    # status = gen_surface(mesh=grid) ; Start generator
     xi = -1
-    yi = np.arange(0,ny,dtype=int)
+    yi = np.arange(0, ny, dtype=int)
     last = 0
     while True:
-    #yi = gen_surface(last=last, xi=xi, period=periodic)
+        # yi = gen_surface(last=last, xi=xi, period=periodic)
         xi = xi + 1
-        if xi == nx-1 :
+        if xi == nx - 1:
             last = 1
 
-        dtheta = 2.*np.pi / np.float(ny)
-        r = grid['Rxy'][xi,yi]
-        z = grid['Zxy'][xi,yi]
+        dtheta = 2.0 * np.pi / np.float(ny)
+        r = grid["Rxy"][xi, yi]
+        z = grid["Zxy"][xi, yi]
         n = np.size(r)
 
-        dl = old_div(np.sqrt( deriv(r)**2 + deriv(z)**2 ), dtheta)
+        dl = old_div(np.sqrt(deriv(r) ** 2 + deriv(z) ** 2), dtheta)
         if area:
-            dA = (old_div(grid['Bxy'][xi,yi],grid['Bpxy'][xi,yi]))*r*dl
-            A = int_func(np.arange(n),dA)
-            theta[xi,yi] = 2.*np.pi*A/A[n-1]
+            dA = (old_div(grid["Bxy"][xi, yi], grid["Bpxy"][xi, yi])) * r * dl
+            A = int_func(np.arange(n), dA)
+            theta[xi, yi] = 2.0 * np.pi * A / A[n - 1]
         else:
-            nu = dl * (grid['Btxy'][xi,yi]) / ((grid['Bpxy'][xi,yi]) * r )
-            theta[xi,yi] = int_func(np.arange(n)*dtheta,nu)
-            theta[xi,yi] = 2.*np.pi*theta[xi,yi] / theta[xi,yi[n-1]]
+            nu = dl * (grid["Btxy"][xi, yi]) / ((grid["Bpxy"][xi, yi]) * r)
+            theta[xi, yi] = int_func(np.arange(n) * dtheta, nu)
+            theta[xi, yi] = 2.0 * np.pi * theta[xi, yi] / theta[xi, yi[n - 1]]
 
-        if last==1 : break
+        if last == 1:
+            break
 
     vy = np.zeros(ny)
     result = np.zeros(nx)
-    for x in range(nx) :
-        for y in range(ny) :
-            vy[y] = np.mean(var[x,y,:])
+    for x in range(nx):
+        for y in range(ny):
+            vy[y] = np.mean(var[x, y, :])
 
-        result[x] = old_div(idl_tabulate(theta[x,:], vy), (2.*np.pi))
+        result[x] = old_div(idl_tabulate(theta[x, :], vy), (2.0 * np.pi))
 
     return result

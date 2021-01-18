@@ -1,12 +1,12 @@
 """
 Contour calculation routines
 
-https://web.archive.org/web/20140901225541/https://members.bellatlantic.net/~vze2vrva/thesis.html"""
-from __future__ import print_function
-from __future__ import division
-from past.utils import old_div
+https://web.archive.org/web/20140901225541/https://members.bellatlantic.net/~vze2vrva/thesis.html
+"""
+from __future__ import division, print_function
 
 import numpy as np
+from past.utils import old_div
 
 
 def contour(f, level):
@@ -15,42 +15,46 @@ def contour(f, level):
     if len(f.shape) != 2:
         print("Contour only works on 2D data")
         return None
-    nx,ny = f.shape
+    nx, ny = f.shape
 
     # Go through each cell edge and mark which ones contain
     # a level crossing. Approximating function as
     # f = axy + bx + cy + d
     # Hence linear interpolation along edges.
 
-    edgecross = {} # Dictionary: (cell number, edge number) to crossing location
+    edgecross = {}  # Dictionary: (cell number, edge number) to crossing location
 
-    for i in np.arange(nx-1):
-        for j in np.arange(ny-1):
+    for i in np.arange(nx - 1):
+        for j in np.arange(ny - 1):
             # Lower-left corner of cell is (i,j)
-            if (np.max(f[i:(i+2),j:(j+2)]) < level) or (np.min(f[i:(i+2),j:(j+2)]) > level):
+            if (np.max(f[i : (i + 2), j : (j + 2)]) < level) or (
+                np.min(f[i : (i + 2), j : (j + 2)]) > level
+            ):
                 # not in the correct range - skip
                 continue
 
             # Check each edge
-            ncross = 0
+            ncross = 0  # noqa: F823
+
             def location(a, b):
                 if (a > level) ^ (a > level):
                     # One of the corners is > level, and the other is <= level
-                    ncross += 1
+                    ncross += 1  # noqa: F841, F823
                     # Find location
                     return old_div((level - a), (b - a))
                 else:
                     return None
 
             loc = [
-                location(f[i,j], f[i+1,j]),
-                location(f[i+1,j], f[i+1,j+1]),
-                location(f[i+1,j+1], f[i,j+1]),
-                location(f[i,j+1], f[i,j])]
+                location(f[i, j], f[i + 1, j]),
+                location(f[i + 1, j], f[i + 1, j + 1]),
+                location(f[i + 1, j + 1], f[i, j + 1]),
+                location(f[i, j + 1], f[i, j]),
+            ]
 
-            if ncross != 0: # Only put into dictionary if has a crossing
-                cellnr = (ny-1)*i + j # The cell number
-                edgecross[cellnr] = [loc,ncross] # Tack ncross onto the end
+            if ncross != 0:  # Only put into dictionary if has a crossing
+                cellnr = (ny - 1) * i + j  # The cell number
+                edgecross[cellnr] = [loc, ncross]  # Tack ncross onto the end
 
     # Process crossings into contour lines
 
@@ -70,11 +74,12 @@ def contour(f, level):
 
     return
 
+
 def find_opoints(var2d):
     """Find O-points in psi i.e. local minima/maxima"""
     return
 
+
 def find_xpoints(var2d):
     """Find X-points in psi i.e. inflection points"""
     return
-
