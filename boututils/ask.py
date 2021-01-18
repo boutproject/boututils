@@ -2,8 +2,8 @@
 
 """
 
-from builtins import input
 import sys
+from builtins import input
 
 
 def query_yes_no(question, default="yes"):
@@ -29,8 +29,15 @@ def query_yes_no(question, default="yes"):
         True if the answer was "yes" or "y", False if "no" or "n"
     """
 
-    valid = {"yes":True,   "y":True,  "ye":True,
-             "no":False,     "n":False,   "No":False,  "N":False }
+    valid = {
+        "yes": True,
+        "y": True,
+        "ye": True,
+        "no": False,
+        "n": False,
+        "No": False,
+        "N": False,
+    }
 
     if default is None:
         prompt = " [y/n] "
@@ -44,10 +51,9 @@ def query_yes_no(question, default="yes"):
     while True:
         sys.stdout.write(question + prompt)
         choice = input().lower()
-        if default is not None and choice == '':
+        if default is not None and choice == "":
             return valid[default]
         elif choice in valid:
             return valid[choice]
         else:
-            sys.stdout.write("Please respond with 'yes' or 'no' "\
-                             "(or 'y' or 'n').\n")
+            sys.stdout.write("Please respond with 'yes' or 'no' " "(or 'y' or 'n').\n")
