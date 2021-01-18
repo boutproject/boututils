@@ -5,11 +5,11 @@ written by: Jarrod Leddy
 updated:    23/06/2016
 
 """
-from __future__ import print_function
-from __future__ import division
+from __future__ import division, print_function
+
 from builtins import range
 
-from numpy import arange, zeros, exp, power, transpose, sin, cos, linspace, min, max
+from numpy import arange, cos, exp, linspace, max, min, power, sin, transpose, zeros
 from scipy import fftpack, pi
 
 
@@ -58,49 +58,53 @@ def spectrogram(data, dx, sigma, clip=1.0, optimise_clipping=True, nskip=1.0):
 
     """
     n = data.size
-    nnew = int(n/nskip)
-    xx = arange(n)*dx
-    xxnew = arange(nnew)*dx*nskip
+    nnew = int(n / nskip)
+    xx = arange(n) * dx
+    xxnew = arange(nnew) * dx * nskip
     sigma = sigma * dx
 
-    n_clipped = int(n/clip)
+    n_clipped = int(n / clip)
 
     # check to see if n_clipped is near a 2^n factor for speed
-    if(optimise_clipping):
+    if optimise_clipping:
         nn = n_clipped
         two_count = 1
-        while(1):
-            nn = nn/2.0
-            if(nn <= 2.0):
-                n_clipped = 2**two_count
-                print('clipping window length from ',n,' to ',n_clipped,' points')
+        while 1:
+            nn = nn / 2.0
+            if nn <= 2.0:
+                n_clipped = 2 ** two_count
+                print("clipping window length from ", n, " to ", n_clipped, " points")
                 break
             else:
                 two_count += 1
     else:
-        print('using full window length: ',n_clipped,' points')
+        print("using full window length: ", n_clipped, " points")
 
-    halfclip = int(n_clipped/2)
-    spectra = zeros((nnew,halfclip))
+    halfclip = int(n_clipped / 2)
+    spectra = zeros((nnew, halfclip))
 
     omega = fftpack.fftfreq(n_clipped, dx)
     omega = omega[0:halfclip]
 
     for i in range(nnew):
-        beg = i*nskip-halfclip
-        end = i*nskip+halfclip-1
+        beg = i * nskip - halfclip
+        end = i * nskip + halfclip - 1
 
         if beg < 0:
-            end = end-beg
+            end = end - beg
             beg = 0
         elif end >= n:
-            end = n-1
+            end = n - 1
             beg = end - n_clipped + 1
 
-        gaussian = 1.0 / (sigma * 2.0 * pi) * exp(-0.5 * power(( xx[beg:end] - xx[i*nskip] ),2.0) / (2.0 * sigma) )
+        gaussian = (
+            1.0
+            / (sigma * 2.0 * pi)
+            * exp(-0.5 * power((xx[beg:end] - xx[i * nskip]), 2.0) / (2.0 * sigma))
+        )
         fftt = abs(fftpack.fft(data[beg:end] * gaussian))
         fftt = fftt[:halfclip]
-        spectra[i,:] = fftt
+        spectra[i, :] = fftt
 
     return (transpose(spectra), omega, xxnew)
 
@@ -123,41 +127,46 @@ def test_spectrogram(n, d, s):
     import matplotlib.pyplot as plt
 
     nskip = 10
-    xx = arange(n)/d
-    test_data = sin(2.0*pi*512.0*xx * ( 1.0 + 0.005*cos(xx*50.0))) + 0.5*exp(xx)*cos(2.0*pi*100.0*power(xx,2))
+    xx = arange(n) / d
+    test_data = sin(2.0 * pi * 512.0 * xx * (1.0 + 0.005 * cos(xx * 50.0))) + 0.5 * exp(
+        xx
+    ) * cos(2.0 * pi * 100.0 * power(xx, 2))
     test_sigma = s
-    dx = 1.0/d
+    dx = 1.0 / d
 
-    s1 = test_sigma*0.1
+    s1 = test_sigma * 0.1
     s2 = test_sigma
-    s3 = test_sigma*10.0
+    s3 = test_sigma * 10.0
 
-    (spec2,omega2,xx) = spectrogram(test_data, dx, s2, clip=5.0, nskip=nskip)
-    (spec3,omega3,xx) = spectrogram(test_data, dx, s3, clip=5.0, nskip=nskip)
-    (spec1,omega1,xx) = spectrogram(test_data, dx, s1, clip=5.0, nskip=nskip)
+    (spec2, omega2, xx) = spectrogram(test_data, dx, s2, clip=5.0, nskip=nskip)
+    (spec3, omega3, xx) = spectrogram(test_data, dx, s3, clip=5.0, nskip=nskip)
+    (spec1, omega1, xx) = spectrogram(test_data, dx, s1, clip=5.0, nskip=nskip)
 
-    levels = linspace(min(spec1),max(spec1),100)
+    levels = linspace(min(spec1), max(spec1), 100)
     plt.subplot(311)
-    plt.contourf(xx,omega1,spec1,levels=levels)
+    plt.contourf(xx, omega1, spec1, levels=levels)
     plt.ylabel("frequency")
     plt.xlabel(r"$t$")
-    plt.title(r"Spectrogram of $sin(t + cos(t) )$ with $\sigma=$%3.1f"%s1)
+    plt.title(r"Spectrogram of $sin(t + cos(t) )$ with $\sigma=$%3.1f" % s1)
 
-    levels = linspace(min(spec2),max(spec2),100)
+    levels = linspace(min(spec2), max(spec2), 100)
     plt.subplot(312)
-    plt.contourf(xx,omega2,spec2,levels=levels)
+    plt.contourf(xx, omega2, spec2, levels=levels)
     plt.ylabel("frequency")
     plt.xlabel(r"$t$")
-    plt.title(r"Spectrogram of $sin(t + cos(t) )$ with $\sigma=$%3.1f"%s2)
+    plt.title(r"Spectrogram of $sin(t + cos(t) )$ with $\sigma=$%3.1f" % s2)
 
-    levels = linspace(min(spec3),max(spec3),100)
+    levels = linspace(min(spec3), max(spec3), 100)
     plt.subplot(313)
-    plt.contourf(xx,omega3,spec3,levels=levels)
+    plt.contourf(xx, omega3, spec3, levels=levels)
     plt.ylabel("frequency")
     plt.xlabel(r"$t$")
-    plt.title(r"Spectrogram of $sin(t + cos(t) )$ with $\sigma=$%3.1f"%s3)
+    plt.title(r"Spectrogram of $sin(t + cos(t) )$ with $\sigma=$%3.1f" % s3)
     plt.tight_layout()
     plt.show()
 
+
 if __name__ == "__main__":
-    test_spectrogram(2048, 2048.0, 0.01) # array size, divisions per unit, sigma of gaussian
+    test_spectrogram(
+        2048, 2048.0, 0.01
+    )  # array size, divisions per unit, sigma of gaussian

@@ -1,12 +1,11 @@
 """Collection of functions which can be used to make a BOUT++ run"""
 
-from builtins import str
 import os
 import pathlib
 import re
 import subprocess
-from subprocess import call, Popen, STDOUT, PIPE
-
+from builtins import str
+from subprocess import PIPE, STDOUT, Popen, call
 
 if os.name == "nt":
     # Default on Windows
@@ -16,22 +15,22 @@ else:
 
 
 def getmpirun(default=DEFAULT_MPIRUN):
-  """Return environment variable named MPIRUN, if it exists else return
-   a default mpirun command
+    """Return environment variable named MPIRUN, if it exists else return
+     a default mpirun command
 
-  Parameters
-  ----------
-  default : str, optional
-      An mpirun command to return if ``MPIRUN`` is not set in the environment
+    Parameters
+    ----------
+    default : str, optional
+        An mpirun command to return if ``MPIRUN`` is not set in the environment
 
-  """
-  MPIRUN = os.getenv("MPIRUN")
+    """
+    MPIRUN = os.getenv("MPIRUN")
 
-  if MPIRUN is None or MPIRUN == "":
-    MPIRUN = default
-    print("getmpirun: using the default " + str(default))
+    if MPIRUN is None or MPIRUN == "":
+        MPIRUN = default
+        print("getmpirun: using the default " + str(default))
 
-  return MPIRUN
+    return MPIRUN
 
 
 def shell(command, pipe=False):
@@ -88,10 +87,9 @@ def determineNumberOfCPUs():
     # cpuset
     # cpuset may restrict the number of *available* processors
     try:
-        m = re.search(r'(?m)^Cpus_allowed:\s*(.*)$',
-                      open('/proc/self/status').read())
+        m = re.search(r"(?m)^Cpus_allowed:\s*(.*)$", open("/proc/self/status").read())
         if m:
-            res = bin(int(m.group(1).replace(',', ''), 16)).count('1')
+            res = bin(int(m.group(1).replace(",", ""), 16)).count("1")
             if res > 0:
                 return res
     except IOError:
@@ -100,22 +98,23 @@ def determineNumberOfCPUs():
     # Python 2.6+
     try:
         import multiprocessing
+
         return multiprocessing.cpu_count()
-    except (ImportError,NotImplementedError):
+    except (ImportError, NotImplementedError):
         pass
 
     # POSIX
     try:
-        res = int(os.sysconf('SC_NPROCESSORS_ONLN'))
+        res = int(os.sysconf("SC_NPROCESSORS_ONLN"))
 
         if res > 0:
             return res
-    except (AttributeError,ValueError):
+    except (AttributeError, ValueError):
         pass
 
     # Windows
     try:
-        res = int(os.environ['NUMBER_OF_PROCESSORS'])
+        res = int(os.environ["NUMBER_OF_PROCESSORS"])
 
         if res > 0:
             return res
@@ -125,6 +124,7 @@ def determineNumberOfCPUs():
     # jython
     try:
         from java.lang import Runtime
+
         runtime = Runtime.getRuntime()
         res = runtime.availableProcessors()
         if res > 0:
@@ -134,8 +134,7 @@ def determineNumberOfCPUs():
 
     # BSD
     try:
-        sysctl = subprocess.Popen(['sysctl', '-n', 'hw.ncpu'],
-                                      stdout=subprocess.PIPE)
+        sysctl = subprocess.Popen(["sysctl", "-n", "hw.ncpu"], stdout=subprocess.PIPE)
         scStdout = sysctl.communicate()[0]
         res = int(scStdout)
 
@@ -146,7 +145,7 @@ def determineNumberOfCPUs():
 
     # Linux
     try:
-        res = open('/proc/cpuinfo').read().count('processor\t:')
+        res = open("/proc/cpuinfo").read().count("processor\t:")
 
         if res > 0:
             return res
@@ -155,8 +154,8 @@ def determineNumberOfCPUs():
 
     # Solaris
     try:
-        pseudoDevices = os.listdir('/devices/pseudo/')
-        expr = re.compile('^cpuid@[0-9]+$')
+        pseudoDevices = os.listdir("/devices/pseudo/")
+        expr = re.compile("^cpuid@[0-9]+$")
 
         res = 0
         for pd in pseudoDevices:
@@ -171,13 +170,13 @@ def determineNumberOfCPUs():
     # Other UNIXes (heuristic)
     try:
         try:
-            dmesg = open('/var/run/dmesg.boot').read()
+            dmesg = open("/var/run/dmesg.boot").read()
         except IOError:
-            dmesgProcess = subprocess.Popen(['dmesg'], stdout=subprocess.PIPE)
+            dmesgProcess = subprocess.Popen(["dmesg"], stdout=subprocess.PIPE)
             dmesg = dmesgProcess.communicate()[0]
 
         res = 0
-        while '\ncpu' + str(res) + ':' in dmesg:
+        while "\ncpu" + str(res) + ":" in dmesg:
             res += 1
 
         if res > 0:
@@ -185,11 +184,18 @@ def determineNumberOfCPUs():
     except OSError:
         pass
 
-    raise Exception('Can not determine number of CPUs on this system')
+    raise Exception("Can not determine number of CPUs on this system")
 
 
-def launch(command, runcmd=None, nproc=None, mthread=None,
-           output=None, pipe=False, verbose=False):
+def launch(
+    command,
+    runcmd=None,
+    nproc=None,
+    mthread=None,
+    output=None,
+    pipe=False,
+    verbose=False,
+):
     """Launch parallel MPI jobs
 
     >>> status = launch(command, nproc, output=None)
@@ -229,7 +235,7 @@ def launch(command, runcmd=None, nproc=None, mthread=None,
     cmd = runcmd + " " + str(nproc) + " " + command
 
     if output is not None:
-        cmd = cmd + " > "+output
+        cmd = cmd + " > " + output
 
     if mthread is not None:
         if os.name == "nt":
@@ -237,9 +243,9 @@ def launch(command, runcmd=None, nproc=None, mthread=None,
             cmd = 'cmd /C "set OMP_NUM_THREADS={} && {}"'.format(mthread, cmd)
         else:
             cmd = "OMP_NUM_THREADS={} {}".format(mthread, cmd)
-        
-    if verbose == True:
-         print(cmd)
+
+    if verbose:
+        print(cmd)
 
     return shell(cmd, pipe=pipe)
 
@@ -258,11 +264,12 @@ def shell_safe(command, *args, **kwargs):
         Optional arguments passed to `shell`
 
     """
-    s, out = shell(command,*args,**kwargs)
+    s, out = shell(command, *args, **kwargs)
     if s:
-        raise RuntimeError("Run failed with %d.\nCommand was:\n%s\n\n"
-                           "Output was\n\n%s"%
-                           (s,command,out))
+        raise RuntimeError(
+            "Run failed with %d.\nCommand was:\n%s\n\n"
+            "Output was\n\n%s" % (s, command, out)
+        )
     return s, out
 
 
@@ -279,11 +286,12 @@ def launch_safe(command, *args, **kwargs):
         Optional arguments passed to `shell`
 
     """
-    s, out = launch(command,*args,**kwargs)
+    s, out = launch(command, *args, **kwargs)
     if s:
-        raise RuntimeError("Run failed with %d.\nCommand was:\n%s\n\n"
-                           "Output was\n\n%s"%
-                           (s,command,out))
+        raise RuntimeError(
+            "Run failed with %d.\nCommand was:\n%s\n\n"
+            "Output was\n\n%s" % (s, command, out)
+        )
     return s, out
 
 

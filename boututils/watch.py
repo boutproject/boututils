@@ -3,10 +3,10 @@ Routines for watching files for changes
 
 """
 from __future__ import print_function
-from builtins import zip
 
-import time
 import os
+import time
+from builtins import zip
 
 
 def watch(files, timeout=None, poll=2):
@@ -45,9 +45,9 @@ def watch(files, timeout=None, poll=2):
 
     # Get modification time of file(s)
     try:
-        if hasattr(files, '__iter__'):
+        if hasattr(files, "__iter__"):
             # Iterable
-            lastmod = [ os.stat(f).st_mtime for f in files ]
+            lastmod = [os.stat(f).st_mtime for f in files]
             iterable = True
         else:
             # Not iterable -> just one file
@@ -66,8 +66,8 @@ def watch(files, timeout=None, poll=2):
             if time.time() - start_time + sleepfor > timeout:
                 # Adjust time so that finish at timeout
                 sleepfor = timeout - (time.time() - start_time)
-                running = False # Stop after next test
-                
+                running = False  # Stop after next test
+
         time.sleep(sleepfor)
 
         if iterable:
