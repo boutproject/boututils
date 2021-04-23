@@ -10,15 +10,11 @@ from tvtk.api import tvtk
 
 
 def aligned_points(grid, nz=1, period=1.0, maxshift=0.4):
-    try:
-        nx = grid["nx"]  # [0]
-        ny = grid["ny"]  # [0]
-        zshift = grid["zShift"]
-        Rxy = grid["Rxy"]
-        Zxy = grid["Zxy"]
-    except:
-        print("Missing required data")
-        return None
+    nx = grid["nx"]  # [0]
+    ny = grid["ny"]  # [0]
+    zshift = grid["zShift"]
+    Rxy = grid["Rxy"]
+    Zxy = grid["Zxy"]
 
     # dz = 2.0 * pi / (period * (nz - 1))
     phi0 = np.linspace(0, 2.0 * pi / period, nz)

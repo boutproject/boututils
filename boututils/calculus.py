@@ -41,10 +41,7 @@ def deriv(*args, **kwargs):
     else:
         raise RuntimeError("deriv must be given 1 or 2 arguments")
 
-    try:
-        periodic = kwargs["periodic"]
-    except:
-        periodic = False
+    periodic = kwargs.get("periodic", False)
 
     n = var.size
     if periodic:
