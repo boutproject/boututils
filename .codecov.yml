@@ -3,9 +3,6 @@ comment: false
 ignore:
   - "test"
 
-codecov:
-  branch: next
-
 coverage:
   status:
     project:
