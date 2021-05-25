@@ -44,10 +44,7 @@ def anim(s, d, *args, **kwargs):
     else:
         s1 = None
 
-    try:
-        save = kwargs["save"]
-    except:
-        save = False
+    save = kwargs.get("save", False)
 
     nt = d.shape[0]
 

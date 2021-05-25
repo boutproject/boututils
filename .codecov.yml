@@ -1,0 +1,11 @@
+comment: false
+
+ignore:
+  - "test"
+
+coverage:
+  status:
+    project:
+      default:
+        target: 30%
+    patch: off

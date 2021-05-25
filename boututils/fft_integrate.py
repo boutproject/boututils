@@ -1,49 +1,41 @@
-from __future__ import division, print_function
-
 from builtins import range
 
 import numpy as np
-from past.utils import old_div
 from pylab import plot, show
 
 
 def fft_integrate(y, loop=None):
-    try:  # If an error occurs, return to caller
+    n = np.size(y)
 
-        n = np.size(y)
+    f = np.fft.fft(y) / n
+    imag = np.complex(0.0, 1.0)
 
-        f = old_div(np.fft.fft(y), n)
-        imag = np.complex(0.0, 1.0)
+    result = np.arange(n) * f[0]
 
-        result = np.arange(n) * f[0]
-        # loop = np.float(n) * f[0]  # return the loop integral
+    f[0] = 0.0
 
-        f[0] = 0.0
+    if (n % 2) == 0:
+        # even number of points
 
-        if (n % 2) == 0:
-            # even number of points
+        for i in range(1, n // 2):
+            a = imag * 2.0 * np.pi * np.float(i) / np.float(n)
+            f[i] = f[i] / a  # positive frequencies
+            f[n - i] = -f[n - i] / a  # negative frequencies
 
-            for i in range(1, old_div(n, 2)):
-                a = imag * 2.0 * np.pi * np.float(i) / np.float(n)
-                f[i] = old_div(f[i], a)  # positive frequencies
-                f[n - i] = old_div(-f[n - i], a)  # negative frequencies
+        f[n // 2] = f[n // 2] / (imag * np.pi)
+    else:
+        # odd number of points
 
-            f[old_div(n, 2)] = old_div(f[old_div(n, 2)], (imag * np.pi))
-        else:
-            # odd number of points
+        for i in range(1, (n + 1) // 2):
+            a = imag * 2.0 * np.pi * np.float(i) / np.float(n)
+            f[i] = f[i] / a
+            f[n - i] = -f[n - i] / a
 
-            for i in range(1, old_div((n - 1), 2) + 1):
-                a = imag * 2.0 * np.pi * np.float(i) / np.float(n)
-                f[i] = old_div(f[i], a)
-                f[n - i] = old_div(-f[n - i], a)
+    result = result + np.fft.ifft(f) * n
 
-        result = result + np.fft.ifft(f) * n
+    result = result - result[0]  # just to make sure
 
-        result = result - result[0]  # just to make sure
-
-        return result
-    except:
-        print("fft_integrate_fail")
+    return result
 
 
 def test_integrate():
