@@ -8,7 +8,7 @@ from __future__ import division, print_function
 from builtins import range, str, zip
 
 import numpy
-from bunch import Bunch
+from boututils.bunch import Bunch
 from crosslines import find_inter
 from matplotlib.pyplot import annotate, contour, draw, gradient, plot
 from past.utils import old_div
