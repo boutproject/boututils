@@ -3,8 +3,8 @@ from __future__ import print_function
 from builtins import range
 
 import numpy
-from geqdsk import Geqdsk
 
+from boututils.geqdsk import Geqdsk
 from boututils.bunch import Bunch
 
 
