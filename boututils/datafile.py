@@ -83,7 +83,7 @@ class DataFile(object):
     impl = None
 
     def __init__(
-        self, filename=None, write=False, create=False, format="NETCDF3_64BIT", **kwargs
+        self, filename=None, write=False, create=False, format="NETCDF4", **kwargs
     ):
         """
 
