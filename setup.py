@@ -45,12 +45,13 @@ setuptools.setup(
         "numpy",
         "matplotlib",
         "scipy",
-        "h5py",
-        "future",
         "netCDF4",
         "importlib-metadata ; python_version<'3.8'",
     ],
-    extras_require={"mayavi": ["mayavi", "PyQt5"]},
+    extras_require={
+        "mayavi": ["mayavi", "PyQt5"],
+        "hdf5": ["h5py"],
+    },
     classifiers=[
         "Programming Language :: Python :: 3",
         (

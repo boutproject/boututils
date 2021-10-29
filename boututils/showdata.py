@@ -7,7 +7,6 @@ Last Updated 19/3/2015
 Additional functionality by George Breyiannis 26/12/2014
 
 """
-from __future__ import division, print_function
 
 from builtins import chr, range, str
 

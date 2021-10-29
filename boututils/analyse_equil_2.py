@@ -3,7 +3,6 @@
 Takes a RZ psi grid, and finds x-points and o-points
 """
 
-from __future__ import division, print_function
 
 from builtins import range, str, zip
 
