@@ -1,4 +1,3 @@
-from __future__ import division
 
 import copy
 from builtins import range

@@ -23,7 +23,6 @@ TODO
 
 """
 
-from __future__ import print_function
 
 from builtins import map, object, str, zip
 
@@ -584,8 +583,8 @@ class DataFile_netCDF(DataFile):
             if var.shape != s:
                 print("DataFile: Variable already exists with different size: " + name)
                 # Fallthrough to the exception
-                raise
-        except:
+                raise KeyError
+        except KeyError:
             # Not found, so add.
 
             # Get dimensions

@@ -46,7 +46,6 @@ setuptools.setup(
         "matplotlib",
         "scipy",
         "h5py",
-        "future",
         "netCDF4",
         "importlib-metadata ; python_version<'3.8'",
     ],

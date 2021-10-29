@@ -1,4 +1,3 @@
-from __future__ import division
 
 import numpy
 from past.utils import old_div

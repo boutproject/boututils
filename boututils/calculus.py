@@ -4,7 +4,6 @@ Derivatives and integrals of periodic and non-periodic functions
 
 B.Dudson, University of York, Nov 2009
 """
-from __future__ import division, print_function
 
 from builtins import range
 
