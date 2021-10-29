@@ -1,4 +1,3 @@
-
 import copy
 from builtins import range
 

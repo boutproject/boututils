@@ -1,4 +1,3 @@
-
 import numpy
 from past.utils import old_div
 

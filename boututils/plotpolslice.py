@@ -1,4 +1,3 @@
-
 import sys
 from builtins import range, str
 
