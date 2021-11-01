@@ -4,8 +4,8 @@ from builtins import range
 
 import numpy
 
-from boututils.geqdsk import Geqdsk
 from boututils.bunch import Bunch
+from boututils.geqdsk import Geqdsk
 
 
 def read_geqdsk(file):
