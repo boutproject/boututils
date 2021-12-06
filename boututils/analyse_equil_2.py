@@ -7,11 +7,12 @@ Takes a RZ psi grid, and finds x-points and o-points
 from builtins import range, str, zip
 
 import numpy
-from bunch import Bunch
 from crosslines import find_inter
 from matplotlib.pyplot import annotate, contour, draw, gradient, plot
 from past.utils import old_div
 from scipy.interpolate import RectBivariateSpline
+
+from boututils.bunch import Bunch
 
 from . import local_min_max
 
