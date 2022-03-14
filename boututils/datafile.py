@@ -314,6 +314,12 @@ class DataFile(object):
     def write_file_attribute(self, name, value):
         return self.impl.write_file_attribute(name, value)
 
+    def get(self, name, default=None):
+        if default is None or name in self.keys():
+            return self[name]
+        else:
+            return default
+
     def __getitem__(self, name):
         return self.impl.__getitem__(name)
 
