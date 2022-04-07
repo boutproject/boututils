@@ -113,7 +113,7 @@ def View3D(g, path=None, gb=None):
     BBx = B1p + B1t
     BBy = B2p + B2t
     BBz = B3p + B3t
-    btotal = np.sqrt(BBx ** 2 + BBy ** 2 + BBz ** 2)
+    btotal = np.sqrt(BBx**2 + BBy**2 + BBz**2)
 
     Psi = psi_field(g, X, Y, Z, rmin, rmax, zmin, zmax)
 
@@ -329,7 +329,7 @@ def View3D(g, path=None, gb=None):
 
 def magnetic_field(g, X, Y, Z, rmin, rmax, zmin, zmax, Br, Bz, Btrz):
 
-    rho = np.sqrt(X ** 2 + Y ** 2)
+    rho = np.sqrt(X**2 + Y**2)
     phi = np.arctan2(Y, X)
 
     br = np.zeros(np.shape(X))
@@ -372,7 +372,7 @@ def magnetic_field(g, X, Y, Z, rmin, rmax, zmin, zmax, Br, Bz, Btrz):
 
 def psi_field(g, X, Y, Z, rmin, rmax, zmin, zmax):
 
-    rho = np.sqrt(X ** 2 + Y ** 2)
+    rho = np.sqrt(X**2 + Y**2)
 
     psi = np.zeros(np.shape(X))
 

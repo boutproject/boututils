@@ -71,7 +71,7 @@ def spectrogram(data, dx, sigma, clip=1.0, optimise_clipping=True, nskip=1.0):
         while 1:
             nn = nn / 2.0
             if nn <= 2.0:
-                n_clipped = 2 ** two_count
+                n_clipped = 2**two_count
                 print("clipping window length from ", n, " to ", n_clipped, " points")
                 break
             else:

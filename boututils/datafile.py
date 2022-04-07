@@ -314,6 +314,9 @@ class DataFile(object):
     def write_file_attribute(self, name, value):
         return self.impl.write_file_attribute(name, value)
 
+    def list_file_attributes(self):
+        return self.impl.list_file_attributes()
+
     def get(self, name, default=None):
         if default is None or name in self.keys():
             return self[name]
@@ -689,6 +692,9 @@ class DataFile_netCDF(DataFile):
     def write_file_attribute(self, name, value):
         setattr(self.handle, name, value)
 
+    def list_file_attributes(self):
+        return self.handle.ncattrs()
+
     def attributes(self, varname):
         try:
             return self._attributes_cache[varname]
@@ -998,6 +1004,9 @@ class DataFile_HDF5(DataFile):
 
     def write_file_attribute(self, name, value):
         self.handle.attrs[name] = value
+
+    def list_file_attributes(self):
+        return self.handle.attrs.keys()
 
     def attributes(self, varname):
 
