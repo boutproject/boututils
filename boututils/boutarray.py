@@ -71,3 +71,31 @@ class BoutArray(numpy.ndarray):
             return super().__format__(str)
         except TypeError:
             return float(self).__format__(str)
+
+    @staticmethod
+    def get_dims_type():
+        return {
+            "Field3D_t": ("t", "x", "y", "z"),
+            "Field2D_t": ("t", "x", "y"),
+            "FieldPerp_t": ("t", "x", "z"),
+            "ArrayX_t": ("t", "x"),
+            "ArrayY_t": ("t", "y"),
+            "ArrayZ_t": ("t", "z"),
+            "scalar_t": ("t",),
+            "Field3D": ("x", "y", "z"),
+            "Field2D": ("x", "y"),
+            "FieldPerp": ("x", "z"),
+            "ArrayX": ("x",),
+            "ArrayY": ("y",),
+            "ArrayZ": ("z",),
+            "scalar": (),
+            "string": ("char",),
+        }
+
+    @staticmethod
+    def dims_from_type(type):
+        return BoutArray.get_dims_type().get(type, None)
+
+    @staticmethod
+    def type_from_dims(dims):
+        return {v: k for k, v in BoutArray.get_dims_type().items()}.get(dims, None)

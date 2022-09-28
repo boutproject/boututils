@@ -505,19 +505,7 @@ class DataFile_netCDF(DataFile):
             else:
                 return "string"
 
-        dims_dict = {
-            ("t", "x", "y", "z"): "Field3D_t",
-            ("t", "x", "y"): "Field2D_t",
-            ("t", "x", "z"): "FieldPerp_t",
-            ("t",): "scalar_t",
-            ("x", "y", "z"): "Field3D",
-            ("x", "y"): "Field2D",
-            ("x", "z"): "FieldPerp",
-            ("x",): "ArrayX",
-            (): "scalar",
-        }
-
-        return dims_dict.get(dims, None)
+        return BoutArray.type_from_dims(dims)
 
     def _bout_dimensions_from_var(self, data):
         try:
@@ -542,19 +530,7 @@ class DataFile_netCDF(DataFile):
             string_length = len(data)
             return ("char" + str(string_length),)
 
-        dims_dict = {
-            "Field3D_t": ("t", "x", "y", "z"),
-            "Field2D_t": ("t", "x", "y"),
-            "FieldPerp_t": ("t", "x", "z"),
-            "scalar_t": ("t",),
-            "Field3D": ("x", "y", "z"),
-            "Field2D": ("x", "y"),
-            "FieldPerp": ("x", "z"),
-            "ArrayX": ("x",),
-            "scalar": (),
-        }
-
-        return dims_dict.get(bout_type, None)
+        return BoutArray.dims_from_type(bout_type)
 
     def write(self, name, data, info=False):
 
@@ -843,25 +819,12 @@ class DataFile_HDF5(DataFile):
 
     def dimensions(self, varname):
         bout_type = self.bout_type(varname)
-        dims_dict = {
-            "Field3D_t": ("t", "x", "y", "z"),
-            "FieldPerp_t": ("t", "x", "z"),
-            "Field2D_t": ("t", "x", "y"),
-            "scalar_t": ("t",),
-            "string_t": ("t", "char"),
-            "Field3D": ("x", "y", "z"),
-            "FieldPerp": ("x", "z"),
-            "Field2D": ("x", "y"),
-            "ArrayX": ("x",),
-            "scalar": (),
-            "string": ("char",),
-        }
-        try:
-            return dims_dict[bout_type]
-        except KeyError:
+        dims = BoutArray.dims_from_type(bout_type)
+        if dims is None:
             raise ValueError(
                 "Variable bout_type not recognized (got {})".format(bout_type)
             )
+        return dims
 
     def _bout_type_from_array(self, data):
         """Get the bout_type from the array 'data'
