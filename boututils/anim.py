@@ -65,7 +65,6 @@ def anim(s, d, *args, **kwargs):
 
 
 if __name__ == "__main__":
-
     path = "../../../examples/elm-pb/data"
 
     data = collect("P", path=path)

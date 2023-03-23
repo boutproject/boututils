@@ -57,7 +57,6 @@ class BOUTOptions(object):
     """
 
     def __init__(self, inp_path=None):
-
         self._sections = ["root"]
 
         for section in self._sections:

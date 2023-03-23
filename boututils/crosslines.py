@@ -133,7 +133,6 @@ def linelineintersect(a, b, atol=1e-08):
     nans_[:, :] = np.isnan(ua)
 
     if not np.ma.any(nans):
-
         # remove duplicate cases where intersection happens on an endpoint
         #        ignore[np.ma.where((ua[:, :-1] == 1) & (ua[:, 1:] == 0))] = True
         #        ignore[np.ma.where((ub[:-1, :] == 1) & (ub[1:, :] == 0))] = True

@@ -213,7 +213,6 @@ def View3D(g, path=None, gb=None):
     #  q=i surfaces
 
     for i in range(np.shape(x)[0]):
-
         s = mlab.pipeline.streamline(field)
         s.streamline_type = "line"
         # s.seed.widget = s.seed.widget_list[0]
@@ -328,7 +327,6 @@ def View3D(g, path=None, gb=None):
 
 
 def magnetic_field(g, X, Y, Z, rmin, rmax, zmin, zmax, Br, Bz, Btrz):
-
     rho = np.sqrt(X**2 + Y**2)
     phi = np.arctan2(Y, X)
 
@@ -371,7 +369,6 @@ def magnetic_field(g, X, Y, Z, rmin, rmax, zmin, zmax, Br, Bz, Btrz):
 
 
 def psi_field(g, X, Y, Z, rmin, rmax, zmin, zmax):
-
     rho = np.sqrt(X**2 + Y**2)
 
     psi = np.zeros(np.shape(X))

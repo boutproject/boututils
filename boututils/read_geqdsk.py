@@ -7,7 +7,6 @@ from boututils.geqdsk import Geqdsk
 
 
 def read_geqdsk(file):
-
     data = Geqdsk()
 
     data.openFile(file)

@@ -28,7 +28,6 @@ def aligned_points(grid, nz=1, period=1.0, maxshift=0.4):
 
     start = 0
     for y in range(ny):
-
         end = start + nx * nz
 
         phi = zshift[:, y] + phi0[:, None]

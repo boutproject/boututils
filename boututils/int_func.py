@@ -37,7 +37,6 @@ def int_func(xin, fin=None, simple=None):
             g[i] = g[i - 1] + 0.5 * (x[i] - x[i - 1]) * (f[i] + f[i - 1])
 
     else:
-
         n2 = numpy.int(old_div(n, 2))
 
         g[0] = 0.0

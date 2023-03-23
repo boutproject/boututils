@@ -535,7 +535,6 @@ class DataFile_netCDF(DataFile):
         return BoutArray.dims_from_type(bout_type)
 
     def write(self, name, data, info=False):
-
         if not self.writeable:
             raise Exception("File not writeable. Open with write=True keyword")
 
@@ -914,7 +913,6 @@ class DataFile_HDF5(DataFile):
         return var.shape
 
     def write(self, name, data, info=False):
-
         if not self.writeable:
             raise Exception("File not writeable. Open with write=True keyword")
 
@@ -977,7 +975,6 @@ class DataFile_HDF5(DataFile):
         return self.handle.attrs.keys()
 
     def attributes(self, varname):
-
         try:
             return self._attributes_cache[varname]
         except KeyError:
