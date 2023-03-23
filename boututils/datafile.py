@@ -511,6 +511,8 @@ class DataFile_netCDF(DataFile):
         try:
             bout_type = data.attributes["bout_type"]
         except AttributeError:
+            if hasattr(data, "dims"):
+                return data.dims
             defdims_list = [
                 (),
                 ("t",),
@@ -541,6 +543,9 @@ class DataFile_netCDF(DataFile):
 
         # Get the variable type
         t = type(data).__name__
+
+        if t == "DataArray":
+            t = data.dtype.str
 
         if t == "NoneType":
             print("DataFile: None passed as data to write. Ignoring")
