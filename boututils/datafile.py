@@ -678,8 +678,10 @@ class DataFile_netCDF(DataFile):
 
         # Write attributes, if present
         try:
-            for attrname in data.attributes:
-                var.setncattr(attrname, data.attributes[attrname])
+            for attrname, attrval in data.attributes.items():
+                if isinstance(attrval, int):
+                    attrval = np.int32(attrval)
+                var.setncattr(attrname, attrval)
         except AttributeError:
             pass
 
@@ -987,8 +989,7 @@ class DataFile_HDF5(DataFile):
             )
 
         try:
-            for attrname in data.attributes:
-                attrval = data.attributes[attrname]
+            for attrname, attrval in data.attributes.items():
                 if type(attrval) == str:
                     attrval = attrval.encode(encoding="utf-8")
                 self.handle[name].attrs.create(attrname, attrval)
