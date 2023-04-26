@@ -209,7 +209,6 @@ def analyse_equil(F, R, Z):
     print("")
 
     if n_xpoint > 0:
-
         # Find the primary separatrix
 
         # First remove non-monotonic separatrices
@@ -265,7 +264,6 @@ def analyse_equil(F, R, Z):
         inner_sep = 0
 
     else:
-
         # No x-points. Pick mid-point in f
 
         xpt_f = 0.5 * (numpy.max(F) + numpy.min(F))

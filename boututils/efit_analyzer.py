@@ -31,7 +31,6 @@ from .read_geqdsk import read_geqdsk
 
 
 def View2D(g, option=0):
-
     # plot and check the field
     fig = figure(num=2, figsize=(16, 6))
     # fig.suptitle('Efit Analysis', fontsize=20)
@@ -350,7 +349,6 @@ def View2D(g, option=0):
 
 
 def surface(cs, i, f, opt_ri, opt_zi, style, iplot=0):
-
     #  contour_lines( F, np.arange(nx).astype(float), np.arange(ny).astype(float),
     #  levels=[start_f])
     #    cs=contour( g.r, g.z, g.psi,  levels=[f])
@@ -400,7 +398,6 @@ def surface(cs, i, f, opt_ri, opt_zi, style, iplot=0):
     #    y=yy
     #
     if iplot == 0:
-
         # plot the start_f line
         zc = cs.collections[i]
         setp(zc, linewidth=4, linestyle=style[i])
@@ -417,7 +414,6 @@ def surface(cs, i, f, opt_ri, opt_zi, style, iplot=0):
 
 
 if __name__ == "__main__":
-
     path = "../../tokamak_grids/pyGridGen/"
 
     g = read_geqdsk(path + "g118898.03400")

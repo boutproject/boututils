@@ -5,7 +5,6 @@ import numpy
 
 # Find the closest contour line to a given point
 def closest_line(n, x, y, ri, zi, mind=None):
-
     mind = numpy.min((x[0] - ri) ** 2 + (y[0] - zi) ** 2)
     ind = 0
 

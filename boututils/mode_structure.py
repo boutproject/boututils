@@ -19,7 +19,6 @@ from .ask import query_yes_no
 
 # interpolates a 1D periodic function
 def zinterp(v, zind):
-
     v = numpy.ravel(v)
 
     nz = numpy.size(v)
@@ -70,7 +69,6 @@ def mode_structure(
     pmodes=None,
     _extra=None,
 ):
-
     # ON_ERROR, 2
     #
     # period = 1 ; default = full torus
@@ -362,7 +360,6 @@ def mode_structure(
         #
         #
         if subset is not None:
-
             # get number of modes larger than 5% of the maximum
             count = numpy.size(numpy.where(fmax > 0.10 * numpy.max(fmax)))
 

@@ -16,7 +16,6 @@ from past.utils import old_div
 def radial_grid(
     n, pin, pout, include_in, include_out, seps, sep_factor, in_dp=None, out_dp=None
 ):
-
     if n == 1:
         return [0.5 * (pin + pout)]
 

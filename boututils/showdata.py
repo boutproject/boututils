@@ -486,7 +486,6 @@ def showdata(
     clevels = []
 
     for i in range(0, Nvar):
-
         dummymax.append([])
         dummymin.append([])
         for j in range(0, Nlines[i]):

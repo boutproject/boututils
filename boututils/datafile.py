@@ -511,6 +511,8 @@ class DataFile_netCDF(DataFile):
         try:
             bout_type = data.attributes["bout_type"]
         except AttributeError:
+            if hasattr(data, "dims"):
+                return data.dims
             defdims_list = [
                 (),
                 ("t",),
@@ -533,7 +535,6 @@ class DataFile_netCDF(DataFile):
         return BoutArray.dims_from_type(bout_type)
 
     def write(self, name, data, info=False):
-
         if not self.writeable:
             raise Exception("File not writeable. Open with write=True keyword")
 
@@ -541,6 +542,9 @@ class DataFile_netCDF(DataFile):
 
         # Get the variable type
         t = type(data).__name__
+
+        if t == "DataArray":
+            t = data.dtype.str
 
         if t == "NoneType":
             print("DataFile: None passed as data to write. Ignoring")
@@ -911,7 +915,6 @@ class DataFile_HDF5(DataFile):
         return var.shape
 
     def write(self, name, data, info=False):
-
         if not self.writeable:
             raise Exception("File not writeable. Open with write=True keyword")
 
@@ -973,7 +976,6 @@ class DataFile_HDF5(DataFile):
         return self.handle.attrs.keys()
 
     def attributes(self, varname):
-
         try:
             return self._attributes_cache[varname]
         except KeyError:
