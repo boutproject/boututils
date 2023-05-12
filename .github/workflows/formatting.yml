@@ -1,0 +1,38 @@
+name: Formatting (black & isort)
+on:
+  push:
+    branches: master
+    paths:
+      - '**.py'
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.x
+    - name: Install black
+      run: |
+        python -m pip install --upgrade pip
+        pip install black isort
+    - name: Version
+      run: |
+        python --version
+        black --version
+        isort --version
+    - name: Run black
+      run: |
+        black boututils
+    - name: Run isort
+      run: |
+        isort boututils
+    - uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: "[skip ci] Apply black/isort changes"
