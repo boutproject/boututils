@@ -652,7 +652,7 @@ class DataFile_netCDF(DataFile):
             try:
                 # Some libraries allow this for arrays
                 var.assignValue(data)
-            except:
+            except Exception:
                 # And some others only this
                 var[:] = data
 
@@ -706,7 +706,7 @@ class DataFile_netCDF(DataFile):
                     attributes[attrname] = var.getncattr(
                         attrname
                     )  # Get all values and insert into map
-            except:
+            except Exception:
                 print("Error reading attributes for " + varname)
                 # Result will be an empty map
 

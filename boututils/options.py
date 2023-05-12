@@ -77,7 +77,7 @@ class BOUTOptions(object):
 
         try:
             inpfile = open(os.path.join(inp_path, "BOUT.inp"), "r")
-        except:
+        except OSError:
             raise TypeError(
                 "ERROR: Could not read file " + os.path.join(inp_path, "BOUT.inp")
             )
