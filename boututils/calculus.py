@@ -44,7 +44,7 @@ def deriv(*args, **kwargs):
 
     n = var.size
     if periodic:
-        # assume uniform grid 
+        # assume uniform grid
         dx = x[1] - x[0]
         # Use FFTs to take derivatives
         f = rfft(var)
@@ -52,12 +52,12 @@ def deriv(*args, **kwargs):
         if n % 2 == 0:
             # Even n
             for i in arange(1, old_div(n, 2)):
-                f[i] *= 2.0j * pi * float(i) / (float(n)*dx)
+                f[i] *= 2.0j * pi * float(i) / (float(n) * dx)
             f[-1] = 0.0  # Nothing from Nyquist frequency
         else:
             # Odd n
             for i in arange(1, old_div((n - 1), 2) + 1):
-                f[i] *= 2.0j * pi * float(i) / (float(n)*dx)
+                f[i] *= 2.0j * pi * float(i) / (float(n) * dx)
         return irfft(f)
     else:
         # Non-periodic function
