@@ -4,8 +4,6 @@ Takes a RZ psi grid, and finds x-points and o-points
 """
 
 
-from builtins import range, str, zip
-
 import numpy
 from crosslines import find_inter
 from matplotlib.pyplot import annotate, contour, draw, gradient, plot

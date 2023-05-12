@@ -11,7 +11,6 @@ https://docs.enthought.com/mayavi/mayavi/auto/example_magnetic_field.html#exampl
 """
 
 import sys
-from builtins import range
 
 import numpy as np
 from boutdata.collect import collect

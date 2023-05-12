@@ -79,9 +79,7 @@ class BOUTOptions(object):
         try:
             inpfile = open(filename, "r")
         except OSError:
-            raise TypeError(
-                f"ERROR: Could not read file {filename}"
-            )
+            raise TypeError(f"ERROR: Could not read file {filename}")
 
         current_section = "root"
         inplines = inpfile.read().splitlines()

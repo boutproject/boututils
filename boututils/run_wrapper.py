@@ -4,7 +4,6 @@ import os
 import pathlib
 import re
 import subprocess
-from builtins import str
 from subprocess import PIPE, STDOUT, Popen, call
 
 if os.name == "nt":

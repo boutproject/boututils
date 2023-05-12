@@ -6,7 +6,6 @@ updated:    23/06/2016
 
 """
 
-from builtins import range
 
 from numpy import arange, cos, exp, linspace, max, min, power, sin, transpose, zeros
 from scipy import fftpack, pi

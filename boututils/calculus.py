@@ -5,7 +5,6 @@ Derivatives and integrals of periodic and non-periodic functions
 B.Dudson, University of York, Nov 2009
 """
 
-from builtins import range
 
 try:
     from past.utils import old_div

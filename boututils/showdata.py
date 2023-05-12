@@ -8,7 +8,6 @@ Additional functionality by George Breyiannis 26/12/2014
 
 """
 
-from builtins import chr, range, str
 
 from matplotlib import animation
 from matplotlib import pyplot as plt

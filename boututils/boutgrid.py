@@ -1,5 +1,3 @@
-from builtins import range
-
 import numpy as np
 from numpy import cos, pi, sin
 from tvtk.api import tvtk

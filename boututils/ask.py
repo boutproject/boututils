@@ -3,7 +3,6 @@
 """
 
 import sys
-from builtins import input
 
 
 def query_yes_no(question, default="yes"):

@@ -24,8 +24,6 @@ TODO
 """
 
 
-from builtins import map, object, str, zip
-
 import numpy as np
 
 from boututils.boutarray import BoutArray
