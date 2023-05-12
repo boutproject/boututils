@@ -3,10 +3,8 @@
 __all__ = []
 __name__ = "boututils"
 
-try:
-    from importlib.metadata import PackageNotFoundError, version
-except ModuleNotFoundError:
-    from importlib_metadata import PackageNotFoundError, version
+from importlib.metadata import PackageNotFoundError, version
+
 try:
     # This gives the version if the boututils package was installed
     __version__ = version(__name__)
