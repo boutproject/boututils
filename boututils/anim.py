@@ -2,7 +2,6 @@
 
 
 import os
-from builtins import range
 
 import numpy as np
 from boutdata.collect import collect

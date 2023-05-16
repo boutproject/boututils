@@ -5,7 +5,6 @@ Routines for watching files for changes
 
 import os
 import time
-from builtins import zip
 
 
 def watch(files, timeout=None, poll=2):

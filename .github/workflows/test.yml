@@ -1,32 +1,21 @@
-name: Test
+name: Test and lint
 
-on:
-  # Run each time we push and pull requests
-  push:
-  pull_request:
-  # Cron job
-  # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows#scheduled-events-schedule
-  schedule:
-    # https://crontab.guru/#0_0_1_*_*
-    - cron: "0 0 1 * *"
+on: [push, pull_request]
 
 jobs:
-  # As we are running on different environments, we are splitting the jobs
-  # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#jobs
-  local:
-    runs-on: ${{ matrix.os }}
+  test:
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: true
       matrix:
-        python-version: [3.7, 3.8]
-        os: [ubuntu-latest]
+        python-version: ["3.8", "3.11"]
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -38,14 +27,14 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install setuptools_scm pytest-cov
-          pip install .
+          pip install .[tests]
 
       - name: Test local run
         run: |
-          pytest --cov=./
+          pytest
 
-      - name: Upload to codecov
-        run: |
-          pip install codecov
-          codecov
+  lint-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: chartboost/ruff-action@v1

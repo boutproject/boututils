@@ -75,12 +75,11 @@ class BOUTOptions(object):
 
         """
 
+        filename = os.path.join(inp_path, "BOUT.inp")
         try:
-            inpfile = open(os.path.join(inp_path, "BOUT.inp"), "r")
-        except:
-            raise TypeError(
-                "ERROR: Could not read file " + os.path.join(inp_path, "BOUT.inp")
-            )
+            inpfile = open(filename, "r")
+        except OSError:
+            raise TypeError(f"ERROR: Could not read file {filename}")
 
         current_section = "root"
         inplines = inpfile.read().splitlines()
@@ -142,7 +141,7 @@ class BOUTOptions(object):
             self._sections.pop(self._sections.index(section))
             super(BOUTOptions, self).__delattr__(section)
         else:
-            print("WARNING: Section " + section + " not found.\n")
+            print(f"WARNING: Section {section} not found.\n")
 
     def list_sections(self, verbose=False):
         """Return all the sections in the options
@@ -159,6 +158,6 @@ class BOUTOptions(object):
         if verbose:
             print("Sections Contained: \n")
             for section in self._sections:
-                print("\t" + section + "\n")
+                print("\t{section}\n")
 
         return self._sections

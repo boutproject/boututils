@@ -1,5 +1,4 @@
 import re
-from builtins import object, range, str
 
 import numpy
 

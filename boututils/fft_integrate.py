@@ -1,5 +1,3 @@
-from builtins import range
-
 import numpy as np
 from pylab import plot, show
 

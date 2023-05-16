@@ -3,8 +3,6 @@
 """
 
 
-from builtins import range
-
 import numpy as np
 from past.utils import old_div
 

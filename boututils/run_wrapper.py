@@ -4,7 +4,6 @@ import os
 import pathlib
 import re
 import subprocess
-from builtins import str
 from subprocess import PIPE, STDOUT, Popen, call
 
 if os.name == "nt":
@@ -28,7 +27,7 @@ def getmpirun(default=DEFAULT_MPIRUN):
 
     if MPIRUN is None or MPIRUN == "":
         MPIRUN = default
-        print("getmpirun: using the default " + str(default))
+        print(f"getmpirun: using the default {default}")
 
     return MPIRUN
 
@@ -176,7 +175,7 @@ def determineNumberOfCPUs():
             dmesg = dmesgProcess.communicate()[0]
 
         res = 0
-        while "\ncpu" + str(res) + ":" in dmesg:
+        while f"\ncpu{res}:" in dmesg:
             res += 1
 
         if res > 0:
@@ -232,17 +231,17 @@ def launch(
         # Determine number of CPUs on this machine
         nproc = determineNumberOfCPUs()
 
-    cmd = runcmd + " " + str(nproc) + " " + command
+    cmd = f"{runcmd} {nproc} {command}"
 
     if output is not None:
-        cmd = cmd + " > " + output
+        cmd = f"{cmd} > {output}"
 
     if mthread is not None:
         if os.name == "nt":
             # We're on windows, so we have to do it a little different
-            cmd = 'cmd /C "set OMP_NUM_THREADS={} && {}"'.format(mthread, cmd)
+            cmd = f'cmd /C "set OMP_NUM_THREADS={mthread} && {cmd}"'
         else:
-            cmd = "OMP_NUM_THREADS={} {}".format(mthread, cmd)
+            cmd = f"OMP_NUM_THREADS={mthread} {cmd}"
 
     if verbose:
         print(cmd)
@@ -289,8 +288,7 @@ def launch_safe(command, *args, **kwargs):
     s, out = launch(command, *args, **kwargs)
     if s:
         raise RuntimeError(
-            "Run failed with %d.\nCommand was:\n%s\n\n"
-            "Output was\n\n%s" % (s, command, out)
+            f"Run failed with {s}.\nCommand was:\n{command}\n\nOutput was\n\n{out}"
         )
     return s, out
 
@@ -306,7 +304,7 @@ def build_and_log(test):
     if os.name == "nt":
         return
 
-    print("Making {}".format(test))
+    print(f"Making {test}")
 
     if os.path.exists("makefile") or os.path.exists("Makefile"):
         return shell_safe("make > make.log")
@@ -330,9 +328,7 @@ def build_and_log(test):
     here = pathlib.Path(".").absolute()
     for parent in here.parents:
         if (parent / "CMakeCache.txt").exists():
-            return shell_safe(
-                "cmake --build {} --target {} > make.log".format(parent, test_name)
-            )
+            return shell_safe(f"cmake --build {parent} --target {test_name} > make.log")
 
     # We've just looked up the entire directory structure and not
     # found the build directory, this could happen if CMakeCache was

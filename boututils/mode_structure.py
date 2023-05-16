@@ -1,5 +1,4 @@
 import sys
-from builtins import range
 
 import numpy as numpy
 from past.utils import old_div
