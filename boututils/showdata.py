@@ -8,7 +8,6 @@ Additional functionality by George Breyiannis 26/12/2014
 
 """
 
-
 from matplotlib import animation
 from matplotlib import pyplot as plt
 from numpy import abs, array, floor, isclose, linspace, max, meshgrid, min, pi

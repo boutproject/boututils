@@ -1,6 +1,5 @@
 """Animate graph with mayavi"""
 
-
 import os
 
 import numpy as np
