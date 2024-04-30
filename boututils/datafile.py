@@ -23,7 +23,6 @@ TODO
 
 """
 
-
 import numpy as np
 
 from boututils.boutarray import BoutArray
@@ -942,7 +941,7 @@ class DataFile_HDF5(DataFile):
 
         try:
             for attrname, attrval in data.attributes.items():
-                if type(attrval) == str:
+                if isinstance(attrval, str):
                     attrval = attrval.encode(encoding="utf-8")
                 self.handle[name].attrs.create(attrname, attrval)
         except AttributeError:
