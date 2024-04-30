@@ -8,13 +8,8 @@
 [![License](https://img.shields.io/badge/license-LGPL--3.0-blue.svg)](https://github.com/boutproject/boututils/blob/master/LICENSE)
 
 pip-package of what was previously found in `BOUT-dev/tools/pylib/boututils` Note that
-`BOUT-dev/tools/pylib/boututils` will likely be replaced by this repo in
-`BOUT++ v4.3.0`. See [this issue](https://github.com/boutproject/BOUT-dev/issues/1347),
-[this pull request](https://github.com/boutproject/BOUT-dev/pull/1766) and
-[this pull request](https://github.com/boutproject/BOUT-dev/pull/1740) for details.
-
-> **NOTE**: This package will likely be superseded by
-> [`xBOUT`](https://github.com/boutproject/xBOUT) in the near future
+`BOUT-dev/tools/pylib/boututils` was replaced by this repo in
+`BOUT++ v4.3.0`.
 
 # Dependencies
 
