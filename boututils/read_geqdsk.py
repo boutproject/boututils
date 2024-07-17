@@ -1,60 +1,28 @@
 import numpy
 
-from boututils.bunch import Bunch
-from boututils.geqdsk import Geqdsk
+from .bunch import Bunch
+from .geqdsk import Geqdsk
 
 
-def read_geqdsk(file):
-    data = Geqdsk()
+def read_geqdsk(filename: str):
+    data = Geqdsk(filename)
 
-    data.openFile(file)
+    nxefit = data["nw"]
+    nyefit = data["nh"]
+    xdim = data["rdim"]
+    zdim = data["zdim"]
+    rcentr = data["rcentr"]
+    rgrid1 = data["rleft"]
+    zmid = data["zmid"]
 
-    nxefit = data.get("nw")
-    nyefit = data.get("nh")
-    xdim = data.get("rdim")
-    zdim = data.get("zdim")
-    rcentr = data.get("rcentr")
-    rgrid1 = data.get("rleft")
-    zmid = data.get("zmid")
-
-    rmagx = data.get("rmaxis")
-    zmagx = data.get("zmaxis")
-    simagx = data.get("simag")
-    sibdry = data.get("sibry")
-    bcentr = data.get("bcentr")
-
-    cpasma = data.get("current")
-    # simagx =data.get('simag')
-    # xdum   =data.get()
-    # rmagx  =data.get('rmaxis')
-    # xdum   =data.get()
-
-    # zmagx  =data.get('zmaxis')
-    # xdum   =data.get()
-    # sibdry =data.get('sibry')
-    # xdum   =data.get()
-    # xdum   =data.get()
-
-    # Read arrays
-
-    fpol = data.get("fpol")
-    pres = data.get("pres")
-
-    f = data.get("psirz")
-    qpsi = data.get("qpsi")
-
-    nbdry = data.get("nbbbs")
-    nlim = data.get("limitr")
+    nlim = data["limitr"]
 
     if nlim != 0:
-        xlim = data.get("rlim")
-        ylim = data.get("zlim")
+        xlim = data["rlim"]
+        ylim = data["zlim"]
     else:
         xlim = [0]
         ylim = [0]
-
-    rbdry = data.get("rbbbs")
-    zbdry = data.get("zbbbs")
 
     # Reconstruct the (R,Z) mesh
     r = numpy.zeros((nxefit, nyefit), numpy.float64)
@@ -64,8 +32,6 @@ def read_geqdsk(file):
         for j in range(0, nyefit):
             r[i, j] = rgrid1 + xdim * i / (nxefit - 1)
             z[i, j] = (zmid - 0.5 * zdim) + zdim * j / (nyefit - 1)
-
-    f = f.T
 
     print("nxefit =  ", nxefit, "  nyefit=  ", nyefit)
 
@@ -77,22 +43,22 @@ def read_geqdsk(file):
         xdim=xdim,
         zdim=zdim,  # Size of the domain in meters
         rcentr=rcentr,
-        bcentr=bcentr,  # Reference vacuum toroidal field (m, T)
+        bcentr=data["bcentr"],  # Reference vacuum toroidal field (m, T)
         rgrid1=rgrid1,  # R of left side of domain
         zmid=zmid,  # Z at the middle of the domain
-        rmagx=rmagx,
-        zmagx=zmagx,  # Location of magnetic axis
-        simagx=simagx,  # Poloidal flux at the axis (Weber / rad)
-        sibdry=sibdry,  # Poloidal flux at plasma boundary (Weber / rad)
-        cpasma=cpasma,  #
-        psi=f,  # Poloidal flux in Weber/rad on grid points
-        fpol=fpol,  # Poloidal current function on uniform flux grid
-        pres=pres,  # Plasma pressure in nt/m^2 on uniform flux grid
-        qpsi=qpsi,  # q values on uniform flux grid
-        nbdry=nbdry,
-        rbdry=rbdry,
-        zbdry=zbdry,  # Plasma boundary
+        rmagx=data["rmagx"],
+        zmagx=data["zmagx"],  # Location of magnetic axis
+        simagx=data["simagx"],  # Poloidal flux at the axis (Weber / rad)
+        sibdry=data["sibdry"],  # Poloidal flux at plasma boundary (Weber / rad)
+        cpasma=data["current"],  #
+        psi=data["psirz"].T,  # Poloidal flux in Weber/rad on grid points
+        fpol=data["fpol"],  # Poloidal current function on uniform flux grid
+        pres=data["pres"],  # Plasma pressure in nt/m^2 on uniform flux grid
+        qpsi=data["qpsi"],  # q values on uniform flux grid
+        nbdry=data["nbbbs"],
+        rbdry=data["rbbbs"],
+        zbdry=data["zbbbs"],  # Plasma boundary
         nlim=nlim,
         xlim=xlim,
         ylim=ylim,
-    )  # Wall boundary
+    )
