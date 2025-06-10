@@ -7,6 +7,10 @@
 [![PEP8](https://img.shields.io/badge/code%20style-PEP8-brightgreen.svg)](https://www.python.org/dev/peps/pep-0008/)
 [![License](https://img.shields.io/badge/license-LGPL--3.0-blue.svg)](https://github.com/boutproject/boututils/blob/master/LICENSE)
 
+> [!IMPORTANT]
+> This has now been merged into [`boutdata`](https://github.com/boutproject/boutdata). Please use that package directly instead.
+
+
 pip-package of what was previously found in `BOUT-dev/tools/pylib/boututils` Note that
 `BOUT-dev/tools/pylib/boututils` was replaced by this repo in
 `BOUT++ v4.3.0`.
